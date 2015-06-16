@@ -1,0 +1,48 @@
+<nav class="navbar navbar-default navbar-fixed-top" style="background-color: #e9e9e9;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Auto Deploy</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right" ng-controller="actionList">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        进行中的安装<span class="badge">((processing.length))</span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li ng-if="processing.length==0"><span style="margin-left: 5px">没有运行的任务</span></li>
+                        <li ng-repeat="task in processing">
+                            <a href="javascript:void(0)"ng-click="view_task">
+                                <span style="margin-left: 5px">((task.name))</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<script>
+    App.controller("actionList", function($scope) {
+        $scope.processing=[];
+        $scope.view_task=function(taskId){
+            alert(taskId)//TODO 连接进入执行界面，继续安装
+        };
+        var getProcessList=function(){
+            //TODO ajax 请求执行中的任务列表
+        }
+        getProcessList();
+    });
+</script>
