@@ -19,10 +19,15 @@
 }
 .br-20{
     margin-bottom:20px;
+    margin-left:20px;
 }
+
 .width-100{
     width: 100%
 }
 .width-80{
     width: 80%
+}
+.check_point{
+    background-color: #e3b100;
 }

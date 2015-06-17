@@ -15,16 +15,16 @@
             <ul class="nav navbar-nav">
 
             </ul>
-            <ul class="nav navbar-nav navbar-right" ng-controller="actionList">
-                <li class="dropdown">
+            <ul class="nav navbar-nav navbar-right" ng-controller="headerController">
+                <li class="dropdown" ng-if="taskList.length>0">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                        进行中的安装<span class="badge">((processing.length))</span>
+                        进行中的安装<span  class="badge" style="background-color:red">((taskList.length))</span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li ng-if="processing.length==0"><span style="margin-left: 5px">没有运行的任务</span></li>
-                        <li ng-repeat="task in processing">
-                            <a href="javascript:void(0)"ng-click="view_task">
-                                <span style="margin-left: 5px">((task.name))</span>
+                        <li ng-if="taskList.length==0"><span style="margin-left: 5px">没有运行的任务</span></li>
+                        <li ng-repeat="task in taskList">
+                            <a class="text-center" href="javascript:void(0)"ng-click="view_task">
+                                <span>((task.name))</span>
                             </a>
                         </li>
                     </ul>
@@ -35,14 +35,18 @@
 </nav>
 
 <script>
-    App.controller("actionList", function($scope) {
-        $scope.processing=[];
+    App.controller("headerController", function($scope,$http) {
+        $scope.taskList=[];
         $scope.view_task=function(taskId){
             alert(taskId)//TODO 连接进入执行界面，继续安装
         };
-        var getProcessList=function(){
-            //TODO ajax 请求执行中的任务列表
+        var get_taskList=function(){
+            $http.get('/get/taskList').success(function(data){
+                $scope.taskList = data;
+            }).error(function(){
+                console.log("数据加载出错");
+            });
         }
-        getProcessList();
+        get_taskList();
     });
 </script>

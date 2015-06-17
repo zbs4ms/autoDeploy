@@ -1,21 +1,5 @@
-from flask import render_template, flash, redirect
+from flask import render_template
 from app import app
-
-
-@app.route('/index')
-def index():
-    user = {'nickname': 'Miguel'}
-    posts = [
-        {
-            'author': {'nickname': 'John'},
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'nickname': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
-    return render_template('index.html',title='Home',user=user,posts=posts)
 
 
 @app.route('/')
@@ -23,14 +7,15 @@ def index():
 def home():
     return render_template('homePage.html',title='home')
 
-@app.route('/process/detail/<name>')
-def processDetail(name=None):
-    return render_template('processDetail.html',title=name)
+@app.route('/process/detail/<id>')
+def processDetail(id=None):
+    process_name="[Name]"
+    return render_template('processDetail.html',title=process_name,process_id=id)
 
-@app.route('/process/edit/<name>')
-def processEdit(name=None):
-
-    return render_template('processEdit.html',title=name)
+@app.route('/process/edit/<id>')
+def processEdit(id=None):
+    process_name="[Name]"
+    return render_template('processEdit.html',title=process_name,id=id)
 
 @app.route('/process/new')
 def processNew():

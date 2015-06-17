@@ -20,6 +20,7 @@ function EventDispatcher (){
     };
 };
 
+var  Bus=new EventDispatcher();//消息总线
 var  App = angular.module("App", []);
 App.config(function($interpolateProvider) {
     $interpolateProvider.startSymbol('((');

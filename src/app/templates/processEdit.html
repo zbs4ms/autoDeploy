@@ -242,3 +242,61 @@
     </div>
 </div>
 {%endblock%}
+
+{% block script %}
+<script>
+    var id="{{process_id}}";
+    App.controller("processEditCtrl", function($scope,$http) {
+        $scope.scripts=[];
+        $scope.process=[];
+        $scope.keyword="";
+        $scope.checkpoint={};
+
+        $scope.remove=function(index){
+            $scope.process.remove(index);
+        }
+
+        $scope.add_script=function(id,name,ver){
+            var data={"id":id,"name":name+" "+ver}
+            $scope.process.add(data)
+        }
+
+        $scope.save_checkpoint=function(checkpoint){
+            $scope.process.add(checkpoint)
+
+        }
+        Bus.regEvent("save_checkpoint",save_checkpoint)
+
+        $scope.edit_checkpoint=function(){
+
+        }
+
+        var get_scripts=function(){
+            $http.get('/get/scripts/'+keyword).success(function(data){
+                $scope.scripts = data;
+            }).error(function(){
+                console.log("数据加载出错");
+            });
+        }
+        get_scripts();
+    });
+
+    App.controller("checkpointCtrl", function($scope) {
+        $scope.checkpoint={
+                check_target:{type:'',value:''},
+                check_content:{type:'',value:''},
+                execute:{type:'',value:''},
+        }
+        $scope.save=function (){
+            Bus.broadcast("save_checkpoint",[JSON.stringify($scope.checkpoint)])
+            $scope.checkpoint={
+                check_target:{type:'',value:''},
+                check_content:{type:'',value:''},
+                execute:{type:'',value:''},
+            }
+        }
+    });
+
+
+</script>
+{% endblock %}
