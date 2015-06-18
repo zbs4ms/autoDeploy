@@ -9,7 +9,7 @@ def findAll():
         catalog=connection.db.catalog;
         list=catalog.find()
         if not list:
-            return nil 
+            return nil
         else:
             array=[]
             for i in list:

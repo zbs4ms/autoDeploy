@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 from flask import render_template
 from app import app
 
@@ -33,3 +34,4 @@ def scriptEdit(id=None):
 @app.route('/script/create')
 def scriptCreate():
     return render_template('scriptDetail.html',title="Script Create")
+

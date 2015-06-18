@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container-fluid">
+<div class="container-fluid" ng-controller="processEditCtrl">
     <div class="row-fluid title">
         <a style="float: right" href="/" class="btn btn-info">
             <span  aria-hidden="true"></span>返回
@@ -166,7 +166,7 @@
                     </div>
                     <br/>
                     <div class="input-group" style="width:100%">
-                        <button class="btn  btn-block btn-default"  data-toggle="modal" data-target="#myModal" type="button">添加检查点</button>
+                        <button class="btn  btn-block btn-default"  ng-click="add_checkpoint()" type="button">添加检查点</button>
                     </div>
                 </div>
             </div>
@@ -178,65 +178,64 @@
             <button class="btn btn-large btn-block btn-primary"  type="button">保存</button>
         </div>
     </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-controller="checkpointCtrl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h4>检查点</h4>
+                </div>
+            </div>
+            <div class="modal-body" >
+                <div class="row br-20">
+                    <div class="col-md-2">
+                        检查对象
+                    </div>
+                    <div class="col-md-5">
+                        <select class="width-100" ng-model = "checkpoint.check_target.type">
+                            <option value="all">全部机器</option>
+                            <option value="custom">特定IP</option>
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <input ng-disabled="checkpoint.check_target.type!='custom'" type="text" class="width-100" ng-model = "checkpoint.check_target.value">
+                    </div>
+                </div>
+                <div class="row br-20">
+                    <div class="col-md-2">
+                        检查内容
+                    </div>
+                    <div class="col-md-5">
+                        <select class="width-100" ng-model = "checkpoint.check_content.type">
+                            <option value="success">执行成功</option>
+                            <option value="fail">执行失败</option>
+                            <option value="sendback">返回消息内容</option>
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <input ng-disabled="checkpoint.check_content.type!='sendback'" type="text" class="width-100" ng-model = "checkpoint.check_content.value">
+                    </div>
+                </div>
+                <div class="row br-20">
+                    <div class="col-md-2">
+                        执行操作
+                    </div>
+                    <div class="col-md-5">
+                        <select class="width-100" ng-model = "checkpoint.execute.type">
+                            <option value="continue">继续执行</option>
+                            <option value="end">终止执行</option>
+                        </select>
+                    </div>
+                    <div class="col-md-5">
 
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div>
-                        <h4>检查点</h4>
                     </div>
                 </div>
-                <div class="modal-body">
-                    <div class="row br-20">
-                        <div class="col-md-2">
-                            检查对象
-                        </div>
-                        <div class="col-md-5">
-                            <select class="width-100">
-                                <option>全部机器</option>
-                                <option>特定IP</option>
-                            </select>
-                        </div>
-                        <div class="col-md-5">
-                            <input type="text" class="width-100">
-                        </div>
-                    </div>
-                    <div class="row br-20">
-                        <div class="col-md-2">
-                            检查内容
-                        </div>
-                        <div class="col-md-5">
-                            <select class="width-100">
-                                <option>执行成功</option>
-                                <option>执行失败</option>
-                                <option>返回消息内容</option>
-                            </select>
-                        </div>
-                        <div class="col-md-5">
-                            <input type="text" class="width-100">
-                        </div>
-                    </div>
-                    <div class="row br-20">
-                        <div class="col-md-2">
-                            执行操作
-                        </div>
-                        <div class="col-md-5">
-                            <select class="width-100">
-                                <option>继续执行</option>
-                                <option>终止执行</option>
-                            </select>
-                        </div>
-                        <div class="col-md-5">
-
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="save()">Save</button>
             </div>
         </div>
     </div>
@@ -258,11 +257,17 @@
 
         $scope.add_script=function(id,name,ver){
             var data={"id":id,"name":name+" "+ver}
-            $scope.process.add(data)
+            $scope.process.push(data)
         }
 
-        $scope.save_checkpoint=function(checkpoint){
-            $scope.process.add(checkpoint)
+        $scope.add_checkpoint=function(){
+            Bus.broadcast("init_checkpoint",[])
+            $('#myModal').modal('show')
+        }
+
+        var save_checkpoint=function(checkpoint){
+            $scope.process.push(checkpoint)
+            console.log($scope.process)
 
         }
         Bus.regEvent("save_checkpoint",save_checkpoint)
@@ -272,7 +277,8 @@
         }
 
         var get_scripts=function(){
-            $http.get('/get/scripts/'+keyword).success(function(data){
+            var param={"keyword":$scope.keyword}
+            $http.get('/get/scripts',param).success(function(data){
                 $scope.scripts = data;
             }).error(function(){
                 console.log("数据加载出错");
@@ -282,19 +288,26 @@
     });
 
     App.controller("checkpointCtrl", function($scope) {
-        $scope.checkpoint={
-                check_target:{type:'',value:''},
-                check_content:{type:'',value:''},
-                execute:{type:'',value:''},
-        }
+        $scope.checkpoint;
         $scope.save=function (){
             Bus.broadcast("save_checkpoint",[JSON.stringify($scope.checkpoint)])
-            $scope.checkpoint={
-                check_target:{type:'',value:''},
-                check_content:{type:'',value:''},
-                execute:{type:'',value:''},
+            $('#myModal').modal('hide')
+        }
+
+        var init_checkpoint=function(data){
+            if(data!=null){
+                $scope.checkpoint=data;
+            }
+            else{
+                $scope.checkpoint={
+                    check_target:{type:'all',value:''},
+                    check_content:{type:'success',value:''},
+                    execute:{type:'continue',value:''},
+                }
             }
         }
+        Bus.regEvent("init_checkpoint",init_checkpoint)
+
     });
 
 

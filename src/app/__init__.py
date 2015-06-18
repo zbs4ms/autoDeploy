@@ -3,4 +3,5 @@ from flask import Flask
 app = Flask(__name__)
 app.config.from_object('config')
 
-from app import views,service
+from app import views
+from app.service import service_api

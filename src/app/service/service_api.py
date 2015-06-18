@@ -1,6 +1,4 @@
 #-*- coding: utf-8 -*-
-
-__author__ = 'wang'
 from flask import request
 from app import app
 import json
@@ -34,8 +32,8 @@ def del_process():
     return json.dumps({"status":0,"message":""});
 
 #取得所有安装脚本列表
-@app.route('/get/scripts/<keyword>')
+@app.route('/post/scripts/', methods=['POST'])
 def get_scripts(keyword=None):
     #TODO 实现查找功能，如果keyword=null 则表示全部查找
-    print(keyword)
+    print(request.json.get('keyword'))
     return json.dumps([{"id":"123","name":"JDK","ver":"1.7"},{"id":"223","name":"JDK","ver":"1.5"}]);
