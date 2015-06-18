@@ -32,8 +32,30 @@ def del_process():
     return json.dumps({"status":0,"message":""});
 
 #取得所有安装脚本列表
-@app.route('/post/scripts/', methods=['POST'])
-def get_scripts(keyword=None):
+@app.route('/post/search_scripts', methods=['POST'])
+def search_scripts():
     #TODO 实现查找功能，如果keyword=null 则表示全部查找
-    print(request.json.get('keyword'))
+    print("keyword="+request.json.get('keyword'))
     return json.dumps([{"id":"123","name":"JDK","ver":"1.7"},{"id":"223","name":"JDK","ver":"1.5"}]);
+
+#取得所有安装脚本列表
+@app.route('/post/save_process', methods=['POST'])
+def save_process():
+    #TODO
+    print(request.json.get('name'))
+    print(request.json.get('process'))
+    return json.dumps({"status":0,"message":""});
+
+#取得所有安装脚本列表
+@app.route('/post/del_script', methods=['POST'])
+def del_script():
+    #TODO
+    print(request.json.get('id'))
+    return json.dumps({"status":0,"message":""});
+
+#取得所有安装脚本列表
+@app.route('/get/script_detail/<id>')
+def get_script_by_id(id):
+    #TODO
+    print(id)
+    return json.dumps({"name":"JDK","version":"1.7","description":"xxx","dependents":[{"id":"1","name":"JDK","ver":"1.7"}]});

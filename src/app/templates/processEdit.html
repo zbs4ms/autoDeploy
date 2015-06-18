@@ -3,109 +3,49 @@
 <div class="container-fluid" ng-controller="processEditCtrl">
     <div class="row-fluid title">
         <a style="float: right" href="/" class="btn btn-info">
-            <span  aria-hidden="true"></span>返回
+            <span aria-hidden="true"></span>返回
         </a>
-        <input type="text" class="form-control" style="width: 300px" placeholder="请命个名呗" aria-describedby="sizing-addon1" value="{{title}}"/>
+        <input type="text" class="form-control" style="width: 300px" placeholder="请命个名呗"
+               aria-describedby="sizing-addon1" ng-model="process_name"/>
     </div>
     <div class="row">
         <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-body main-content">
                     <div style="height: 350px;overflow-y: auto">
-                        <table class="table  text-center" >
+                        <table class="table  text-center">
                             <thead>
-                            <tr >
-                                <td >
+                            <tr>
+                                <td>
                                     <b>模块名称</b>
                                 </td>
-                                <td >
+                                <td>
                                     <b>版本号</b>
                                 </td>
                                 <td></td>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr >
+                            <tr ng-repeat="scr in scripts">
                                 <td>
-                                    JDK
+                                    ((scr.name))
                                 </td>
                                 <td>
-                                    1.7
+                                    ((scr.ver))
                                 </td>
-                                <td><a href="#"> 添加</a></td>
+                                <td><a href="javascript:void(0)"
+                                       ng-click="add_script( ((scr.id)),((scr.name)),((scr.ver)) )"> 添加</a></td>
                             </tr>
 
-                            <tr >
-                                <td>
-                                    JDK
-                                </td>
-                                <td>
-                                    1.5
-                                </td>
-                                <td><a href="#"> 添加</a></td>
-                            </tr>
-                            <tr >
-                                <td>
-                                    MySql
-                                </td>
-                                <td>
-                                    2.0
-                                </td>
-                                <td><a href="#"> 添加</a></td>
-                            </tr>
-                            <tr >
-                                <td>
-                                    MySql
-                                </td>
-                                <td>
-                                    2.0
-                                </td>
-                                <td><a href="#"> 添加</a></td>
-                            </tr>
-                            <tr >
-                                <td>
-                                    MySql
-                                </td>
-                                <td>
-                                    2.0
-                                </td>
-                                <td><a href="#"> 添加</a></td>
-                            </tr>
-                            <tr >
-                                <td>
-                                    MySql
-                                </td>
-                                <td>
-                                    2.0
-                                </td>
-                                <td><a href="#"> 添加</a></td>
-                            </tr>
-                            <tr >
-                                <td>
-                                    MySql
-                                </td>
-                                <td>
-                                    2.0
-                                </td>
-                                <td><a href="#"> 添加</a></td>
-                            </tr>
-                            <tr >
-                                <td>
-                                    MySql
-                                </td>
-                                <td>
-                                    2.0
-                                </td>
-                                <td><a href="#"> 添加</a></td>
-                            </tr>
                             </tbody>
                         </table>
                     </div>
                     <br/>
+
                     <div class="input-group">
-                        <input type="text" placeholder="Search for..." class="form-control">
+                        <input type="text" placeholder="Search for..." class="form-control" ng-model="keyword" ng-keyup="keyup_search($event)">
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-default">Search</button>
+                            <button type="button" class="btn btn-default" ng-click="search_scripts()">Search</button>
                         </span>
                     </div>
                 </div>
@@ -116,57 +56,39 @@
             <div class="panel panel-default">
                 <div class="panel-body" style="min-height: 400px;background-color:#eee">
                     <div style="height: 350px;overflow-y: auto">
-                        <table class="table  text-center" >
+                        <table class="table  text-center">
                             <thead>
-                            <tr >
+                            <tr>
                                 <td></td>
-                                <td >
+                                <td>
                                     <b>序号</b>
                                 </td>
-                                <td >
+                                <td>
                                     <b>模块名称</b>
                                 </td>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr >
-                                <td><a href="#">移除</a></td>
+                            <tr ng-repeat="pcs in process">
+                                <td><a href="javascript:void(0)" ng-click="remove( (($index)) )">移除</a></td>
                                 <td>
-                                    1
+                                    (($index+1))
                                 </td>
                                 <td>
-                                    JDK
+                                    <a href="javascript:void(0)" ng-if="((pcs.name=='检查点'))"
+                                       ng-click="edit_checkpoint( (($index)) )">((pcs.name))</a>
+                                    <span ng-if="((pcs.name!='检查点'))">((pcs.name))</span>
                                 </td>
-
-                            </tr>
-
-                            <tr >
-                                <td><a href="#">移除</a></td>
-                                <td>
-                                    2
-                                </td>
-                                <td>
-                                    Mysql
-                                </td>
-
-                            </tr>
-                            <tr >
-                                <td><a href="#">移除</a></td>
-                                <td>
-                                    3
-                                </td>
-                                <td>
-                                    【检查点】
-                                </td>
-
                             </tr>
 
                             </tbody>
                         </table>
                     </div>
                     <br/>
+
                     <div class="input-group" style="width:100%">
-                        <button class="btn  btn-block btn-default"  ng-click="add_checkpoint()" type="button">添加检查点</button>
+                        <button class="btn  btn-block btn-default" ng-click="edit_checkpoint()" type="button">添加检查点
+                        </button>
                     </div>
                 </div>
             </div>
@@ -175,141 +97,90 @@
 
     <div class="row">
         <div class="col-md-12">
-            <button class="btn btn-large btn-block btn-primary"  type="button">保存</button>
+            <button class="btn btn-large btn-block btn-primary" ng-click="save_process()" type="button">保存</button>
         </div>
     </div>
 </div>
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-controller="checkpointCtrl">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div>
-                    <h4>检查点</h4>
-                </div>
-            </div>
-            <div class="modal-body" >
-                <div class="row br-20">
-                    <div class="col-md-2">
-                        检查对象
-                    </div>
-                    <div class="col-md-5">
-                        <select class="width-100" ng-model = "checkpoint.check_target.type">
-                            <option value="all">全部机器</option>
-                            <option value="custom">特定IP</option>
-                        </select>
-                    </div>
-                    <div class="col-md-5">
-                        <input ng-disabled="checkpoint.check_target.type!='custom'" type="text" class="width-100" ng-model = "checkpoint.check_target.value">
-                    </div>
-                </div>
-                <div class="row br-20">
-                    <div class="col-md-2">
-                        检查内容
-                    </div>
-                    <div class="col-md-5">
-                        <select class="width-100" ng-model = "checkpoint.check_content.type">
-                            <option value="success">执行成功</option>
-                            <option value="fail">执行失败</option>
-                            <option value="sendback">返回消息内容</option>
-                        </select>
-                    </div>
-                    <div class="col-md-5">
-                        <input ng-disabled="checkpoint.check_content.type!='sendback'" type="text" class="width-100" ng-model = "checkpoint.check_content.value">
-                    </div>
-                </div>
-                <div class="row br-20">
-                    <div class="col-md-2">
-                        执行操作
-                    </div>
-                    <div class="col-md-5">
-                        <select class="width-100" ng-model = "checkpoint.execute.type">
-                            <option value="continue">继续执行</option>
-                            <option value="end">终止执行</option>
-                        </select>
-                    </div>
-                    <div class="col-md-5">
-
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" ng-click="save()">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
+{% include "include/checkpoint_edit.html"%}
 {%endblock%}
 
 {% block script %}
 <script>
-    var id="{{process_id}}";
-    App.controller("processEditCtrl", function($scope,$http) {
-        $scope.scripts=[];
-        $scope.process=[];
-        $scope.keyword="";
-        $scope.checkpoint={};
+    var id = "{{process_id}}";
+    App.controller("processEditCtrl", function ($scope, $http) {
+        $scope.scripts = [];
+        $scope.process = [];
+        $scope.process_name = "";
+        $scope.keyword = "";
 
-        $scope.remove=function(index){
-            $scope.process.remove(index);
+        $scope.save_process = function () {
+            if (!value_check()) {
+                return false
+            }
+            ;//数据检查
+
+            var param = {"name": $scope.process_name, "process": $scope.process}
+            $http.post('/post/save_process', param).success(function (data) {
+                if (data.status == -1) {
+                    alert(data.message);
+                } else {
+                    location.href = "/"
+                }
+            }).error(function () {
+                console.log("服务器连接失败");
+            });
         }
 
-        $scope.add_script=function(id,name,ver){
-            var data={"id":id,"name":name+" "+ver}
+        $scope.remove = function (index) {
+            $scope.process.pop(index);
+        }
+
+        $scope.add_script = function (id, name, ver) {
+            var data = {"id": id, "name": name + " " + ver}
             $scope.process.push(data)
         }
 
-        $scope.add_checkpoint=function(){
-            Bus.broadcast("init_checkpoint",[])
-            $('#myModal').modal('show')
-        }
-
-        var save_checkpoint=function(checkpoint){
-            $scope.process.push(checkpoint)
-            console.log($scope.process)
-
-        }
-        Bus.regEvent("save_checkpoint",save_checkpoint)
-
-        $scope.edit_checkpoint=function(){
-
-        }
-
-        var get_scripts=function(){
-            var param={"keyword":$scope.keyword}
-            $http.get('/get/scripts',param).success(function(data){
+        $scope.search_scripts = function () {
+            var param = {"keyword": $scope.keyword}
+            $http.post('/post/search_scripts', param).success(function (data) {
                 $scope.scripts = data;
-            }).error(function(){
+            }).error(function () {
                 console.log("数据加载出错");
             });
         }
-        get_scripts();
-    });
 
-    App.controller("checkpointCtrl", function($scope) {
-        $scope.checkpoint;
-        $scope.save=function (){
-            Bus.broadcast("save_checkpoint",[JSON.stringify($scope.checkpoint)])
-            $('#myModal').modal('hide')
+        $scope.keyup_search = function(e){
+            var keycode = window.event?e.keyCode:e.which;
+            if(keycode==13){
+                $scope.search_scripts()
+            }
+        };
+
+        $scope.edit_checkpoint = function (index) {
+            var data = $scope.process[index];
+            Bus.broadcast("open_checkpoint_modal", [data])
         }
 
-        var init_checkpoint=function(data){
-            if(data!=null){
-                $scope.checkpoint=data;
-            }
-            else{
-                $scope.checkpoint={
-                    check_target:{type:'all',value:''},
-                    check_content:{type:'success',value:''},
-                    execute:{type:'continue',value:''},
-                }
-            }
+        var save_checkpoint = function (checkpoint) {
+            $scope.process.push(checkpoint)
         }
-        Bus.regEvent("init_checkpoint",init_checkpoint)
+        Bus.regEvent("save_checkpoint", save_checkpoint)
 
+        var value_check = function () {
+            var status = true;
+            if ($scope.process_name.trim() == "") {
+                alert("请填写名字")
+                status = false;
+            }
+            if ($scope.process == null || $scope.process.length == 0) {
+                alert("请选择安装流程")
+                status = false;
+            }
+            return status;
+        }
+
+        $scope.search_scripts();
     });
-
 
 </script>
 {% endblock %}

@@ -1,0 +1,37 @@
+<div class="row" id="base_info">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body main-content" style="font-size: 18px">
+                <div class="row" style="margin-bottom: 20px">
+                    <div class="col-md-3 text-right">模块名称*:</div>
+                    <div class="col-md-8"><input type="text" ng-model="detail.name" placeholder="给个名字呗" class="form-control"></div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="row" style="margin-bottom: 20px">
+                    <div class="col-md-3 text-right">版本号*:</div>
+                    <div class="col-md-8"><input type="text" ng-model="detail.version" placeholder="名字和版本号会作为id标示" class="form-control"></div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="row" style="margin-bottom: 20px">
+                    <div class="col-md-3 text-right">描述:</div>
+                    <div class="col-md-8"><textarea class="detail-textArea" ng-model="detail.description"></textarea></div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="row" style="margin-bottom: 20px;">
+                    <div class="col-md-3 text-right">依赖模块(可选):</div>
+                    <div class="col-md-8">
+                        <a href="#" class="btn btn-default" data-toggle="modal" data-target="#myModal">
+                            <span aria-hidden="true"></span>添加
+                        </a>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="col-md-12">
+        <button class="btn btn-large btn-block btn-info" ng-click="edit_script()" type="button">编写脚本</button>
+    </div>
+</div>

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container-fluid">
+<div class="container-fluid" ng-controller="scriptCtrl">
     <div class="row-fluid title">
         <a style="float: right" href="/" class="btn btn-info">
             <span aria-hidden="true"></span>返回
@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-body main-content" style="">
+                <div class="panel-body main-content">
                     <div style="height: 350px;overflow-y: auto">
                         <table class="table  text-center">
                             <thead>
@@ -26,92 +26,27 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>
-                                    JDK
-                                </td>
-                                <td>
-                                    1.7
-                                </td>
-                                <td><a href="#"> 编辑</a><a href="#"> 删除</a></td>
-
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    JDK
-                                </td>
-                                <td>
-                                    1.5
-                                </td>
-                                <td><a href="#"> 编辑</a><a href="#"> 删除</a></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    MySql
-                                </td>
-                                <td>
-                                    2.0
-                                </td>
-                                <td><a href="#"> 编辑</a><a href="#"> 删除</a></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    MySql
-                                </td>
-                                <td>
-                                    2.0
-                                </td>
-                                <td><a href="#"> 编辑</a><a href="#"> 删除</a></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    MySql
-                                </td>
-                                <td>
-                                    2.0
-                                </td>
-                                <td><a href="#"> 编辑</a><a href=“javascript:confirm('您确定要删除吗?')”> 删除</a></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    MySql
-                                </td>
-                                <td>
-                                    2.0
-                                </td>
-                                <td><a href="#"> 编辑</a><a href="#"> 删除</a></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    MySql
-                                </td>
-                                <td>
-                                    2.0
-                                </td>
-                                <td><a href="#"> 编辑</a><a href="#"> 删除</a></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    MySql
-                                </td>
-                                <td>
-                                    2.32
-                                </td>
-                                <td>
-                                    <a href="/script/edit/mysql"> 编辑</a>
-                                    <a href="javascript:void(0)" onclick="delete_confirm()"> 删除</a>
-                                </td>
-                            </tr>
+                                <tr ng-repeat="scr in scripts">
+                                    <td>
+                                        ((scr.name))
+                                    </td>
+                                    <td>
+                                        ((scr.ver))
+                                    </td>
+                                    <td>
+                                        <a href="/script/edit/((scr.id))"> 编辑</a>
+                                        <a href="javascript:void(0)" ng-click="remove( ((scr.id)) )"> 删除 </a>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                     <br/>
 
                     <div class="input-group">
-                        <input type="text" placeholder="Search for..." class="form-control">
+                        <input type="text" placeholder="Search for..." class="form-control" ng-model="keyword" ng-keyup="keyup_search($event)">
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-default">Search</button>
+                            <button type="button" class="btn btn-default" ng-click="search_scripts()">Search</button>
                         </span>
                     </div>
                 </div>
@@ -127,15 +62,44 @@
 
 </div>
 {%endblock%}
+
 {% block script %}
 <script>
-    function delete_confirm()
-    {
-        if(window.confirm('你确定？！')){
-            alert("别后悔");
-        }else{
-            return false;
+    App.controller("scriptCtrl", function ($scope, $http) {
+        $scope.scripts = [];
+        $scope.keyword = "";
+
+        $scope.remove = function (id) {
+            if(window.confirm("你确定?!")){
+                var param = {"id": id}
+                $http.post('/post/del_script', param).success(function (data) {
+                    if (data.status == -1) {
+                        alert(data.message);
+                    }
+                }).error(function () {
+                    console.log("服务器连接失败");
+                });
+            }
         }
-    }
+
+        $scope.search_scripts = function () {
+            var param = {"keyword": $scope.keyword}
+            $http.post('/post/search_scripts', param).success(function (data) {
+                $scope.scripts = data;
+            }).error(function () {
+                console.log("数据加载出错");
+            });
+        }
+
+        $scope.keyup_search = function(e){
+            var keycode = window.event?e.keyCode:e.which;
+            if(keycode==13){
+                $scope.search_scripts()
+            }
+        };
+
+        $scope.search_scripts();
+    });
+
 </script>
 {% endblock %}

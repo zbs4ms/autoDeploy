@@ -9,12 +9,12 @@ def home():
     return render_template('homePage.html',title='home')
 
 @app.route('/process/detail/<id>')
-def processDetail(id=None):
+def processDetail(id):
     process_name="[Name]"
     return render_template('processDetail.html',title=process_name,process_id=id)
 
 @app.route('/process/edit/<id>')
-def processEdit(id=None):
+def processEdit(id):
     process_name="[Name]"
     return render_template('processEdit.html',title=process_name,id=id)
 
@@ -27,11 +27,11 @@ def scriptOverview():
     return render_template('scriptOverview.html',title="Script Overview")
 
 @app.route('/script/edit/<id>')
-def scriptEdit(id=None):
-    name=id
-    return render_template('scriptDetail.html',title=name)
+def scriptEdit(id):
+    print(id)
+    return render_template('scriptEdit.html',id=id)
 
 @app.route('/script/create')
 def scriptCreate():
-    return render_template('scriptDetail.html',title="Script Create")
+    return render_template('scriptEdit.html',title="Script Create")
 
