@@ -16,6 +16,7 @@ class Task(object):
 
 #部署目录的class
 class Process(object):
+
     def __init__(self):
         self.conn = dao.PyConnect()
 
