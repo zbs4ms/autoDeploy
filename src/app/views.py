@@ -35,3 +35,19 @@ def scriptEdit(id):
 def scriptCreate():
     return render_template('scriptEdit.html',title="Script Create")
 
+@app.route('/task/create/<process_id>')
+def taskCreate(process_id):
+    return render_template('createTask.html',process_id=process_id)
+
+@app.route('/task/config/<process_id>')
+def taskConfig(process_id):
+    print process_id
+    return render_template('taskConfig.html',process_id=process_id)
+
+@app.route('/task/execute/<task_id>')
+def taskExecute(task_id):
+    print task_id
+    isDone=0
+    return render_template('executePage.html',task_id=task_id,isDone=isDone)
+
+

@@ -21,7 +21,6 @@
     margin-bottom:20px;
     margin-left:20px;
 }
-
 .width-100{
     width: 100%
 }
@@ -30,4 +29,12 @@
 }
 .check_point{
     background-color: #e3b100;
+}
+.selected_target{
+    font-size: 24px;
+}
+.console_window{
+    background-color:#0F0F10;
+    color: #dddddd;
+    border-radius: 5px;
 }

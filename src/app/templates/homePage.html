@@ -36,7 +36,9 @@
         $scope.processList=[{"id":"123","name":"云平台安装"}];
         var get_processList=function(){
             $http.get('/get/processList').success(function(data){
-                $scope.processList = data;
+                if(data instanceof Array&&data.length>0){
+                    $scope.processList = data;
+                }
             }).error(function(){
                 console.log("数据加载出错");
             });

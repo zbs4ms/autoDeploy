@@ -42,7 +42,9 @@
         };
         var get_taskList=function(){
             $http.get('/get/taskList').success(function(data){
-                $scope.taskList = data;
+                if(data instanceof Array&&data.length>0){
+                    $scope.taskList = data;
+                }
             }).error(function(){
                 console.log("数据加载出错");
             });

@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid" ng-controller="taskCtrl">
+    <div class="row-fluid title">
+        <a style="float: right" href="/process/detail/{{process_id}}" class="btn btn-info">
+            <span aria-hidden="true"></span>返回
+        </a>
+
+        <h3 id="example-heading-new">创建安装任务</h3>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12" style="height: 400px;overflow-y: auto">
+            <table class="table">
+
+                <tbody>
+                    <tr ng-repeat="tr in target_list">
+                        <td>((tr.ip))</td>
+                        <td>((tr.user))</td>
+                        <td>((tr.password))</td>
+                        <td><a href="javascript:void(0)" ng-click="remove( (($index)) )">删除</a></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" placeholder="目标IP" class="form-control" ng-model="target.ip"></td>
+                        <td><input type="text" placeholder="登录用户" class="form-control" ng-model="target.user"></td>
+                        <td><input type="text" placeholder="登录密码" class="form-control" ng-model="target.password"></td>
+                        <td><button class="btn btn-default" ng-click="add_target()">添加</button></td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+        <br/>
+        <div class="col-md-12">
+            <button class="btn btn-large btn-block btn-info"  ng-click="create_task()" type="button">创建安装任务</button>
+        </div>
+    </div>
+
+</div>
+
+{%endblock%}
+
+{% block script %}
+<script>
+    var id='{{process_id}}';
+    App.controller("taskCtrl", function ($scope, $http) {
+        $scope.target_list=[];
+        $scope.target;
+        $scope.add_target=function(){
+            if(!valueCheck()){return false}
+            console.log($scope.target_list)
+            $scope.target_list.push($scope.target)
+            init();
+        }
+
+        $scope.remove=function(index){
+            $scope.target_list.pop(index);
+        }
+
+        $scope.create_task=function(){
+            if($scope.target_list==null||$scope.target_list.length==0){
+                alert("请填入目标机信息")
+                return false;
+            }
+            var param={"targetList":$scope.target_list}
+            $http.post('/post/create_task',param).success(function(data){
+                if (data.status == -1) {
+                    alert(data.message);
+                    return;
+                }
+                if(data.id==null){
+                    alert("数据加载出错");
+                    //return;
+                }
+                location.href="/task/config/"+data.id
+            }).error(function(){
+                console.log("数据加载出错");
+            });
+        }
+
+        var valueCheck=function(){
+            var status=true;
+            if($scope.target.ip==""){alert("请填入IP");status=false}
+            if($scope.target.user==""){alert("请填入登录用户");status=false}
+            if($scope.target.password==""){alert("请填入登录密码");status=false}
+            return status
+        }
+
+        var init= function () {
+            $scope.target={
+                ip:"",
+                user:"",
+                password:""
+            }
+        }
+        init();
+    });
+
+</script>
+{% endblock %}
