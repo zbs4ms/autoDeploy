@@ -8,9 +8,7 @@
     min-height: 400px;background-color:#eee
 }
 .detail-textArea{
-    border: 1px solid #ccc;
-    height: 150px;
-    width: 100%;
+    resize: none;
 }
 .btn-normal{
     background-color: #dddddd;
@@ -37,4 +35,15 @@
     background-color:#0F0F10;
     color: #dddddd;
     border-radius: 5px;
+}
+.script_detail{
+    display: none;
+}
+.script_edit_window{
+    resize: none;
+    height: 50%;
+    width: 100%
+}
+.hide{
+    display: none;
 }

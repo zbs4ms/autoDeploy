@@ -99,11 +99,33 @@ def get_task_log(task_id):
 def get_task_params(task_id):
     #TODO
     print(task_id)
-    return json.dumps([{"name":"user","value":"","scope":"all"},{"name":"HOST","value":"","scope":"192.0.0.1"}])
+    return json.dumps([{"name":"user","value":"","scope":"all","description":"用户名称"},{"name":"HOST","value":"","scope":"192.0.0.1"}])
 
 #保存任务变量
 @app.route('/post/save/taskParams', methods=['POST'])
 def save_param():
     #TODO
     print(request.json.get('params'))
+    return json.dumps({"status":0,"message":""})
+
+#测试目标机连接
+@app.route('/post/test/connection', methods=['POST'])
+def test_connection():
+    #TODO
+    print(request.json.get('target'))
+    return json.dumps({"status":0,"message":""})
+
+#取得测试环境的执行结果
+@app.route('/post/test/script', methods=['POST'])
+def test_script():
+    print(request.json.get('params'))
+    return json.dumps(["install","安装成功"])
+
+#保存脚本
+@app.route('/post/save/script', methods=['POST'])
+def save_script():
+    print(request.json.get('name'))
+    print(request.json.get('version'))
+    print(request.json.get('description'))
+    print(request.json.get('script'))
     return json.dumps({"status":0,"message":""})

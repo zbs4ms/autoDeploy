@@ -20,6 +20,15 @@ function EventDispatcher (){
     };
 };
 
+function IpCheck(ip) {
+    var exp = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+    var reg = ip.match(exp);
+    if (reg == null) {
+        return false;
+    }
+    return true;
+}
+
 var  Bus=new EventDispatcher();//消息总线
 var  App = angular.module("App", []);
 App.config(function($interpolateProvider) {

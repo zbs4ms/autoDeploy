@@ -1,13 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container-fluid" ng-controller="scriptCtrl">
-    <div class="row-fluid title">
-        <a style="float: right" href="/script/overview" class="btn btn-info">
-            <span aria-hidden="true"></span>返回
-        </a>
 
-        <h3 id="example-heading-new">脚本信息</h3>
-    </div>
 
     {% include "include/script_info.html"%}
     {% include "include/script_detail.html"%}
@@ -46,9 +40,29 @@
     var id='{{id}}';
     App.controller("scriptCtrl", function ($scope, $http) {
         $scope.detail;
+
+        $scope.save_script=function(){
+            $http.post('/post/save/script',$scope.detail).success(function (data) {
+                if (data.status == -1) {
+                    alert(data.message);
+                }else{
+                    location.href="/"
+                }
+            }).error(function () {
+                console.log("数据加载出错");
+            });
+
+        }
+
         $scope.edit_script=function(){
             $("#base_info").slideToggle(400,function(){
                 $("#detail").slideToggle(400);
+            });
+
+        }
+        $scope.back=function(){
+            $("#detail").slideToggle(400,function(){
+                $("#base_info").slideToggle(400);
             });
 
         }
@@ -65,7 +79,7 @@
                     version:"",
                     description:"",
                     dependents:[],
-                    script:""
+                    script:{type:"bash",bash_shell:"",expect_shell:""}
                 };
             }
 
