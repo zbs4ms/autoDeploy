@@ -2,6 +2,7 @@
 
 from pymongo import MongoClient
 from tool import response
+from tool import createId
 
 class PyConnect(object):
     def __init__(self):
@@ -29,6 +30,7 @@ class PyConnect(object):
 
     def insert(self, data):
         try:
+            data[id]=createId()
             self.coll.insert(data)
             return response().success()
         except:

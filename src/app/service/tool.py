@@ -1,6 +1,8 @@
 #-*- coding: utf-8 -*-
 
 import json
+import time
+import random
 
 #数据转json
 def getJsonByDict(data):
@@ -24,6 +26,12 @@ def getJsonByObject(obj):
     d = {}
     d.update(obj.__dict__)
     return json.dumps(d)
+
+#生成唯一ID
+def createId():
+    t = str(time.time()).replace('.','');
+    c = random.randint(0, 9999)
+    return int(t+c)
 
 #通用错误包装方法
 def commonError(message=None):
