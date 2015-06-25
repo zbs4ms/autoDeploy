@@ -2,7 +2,7 @@ __author__ = 'wang'
 # -*- coding: utf-8 -*-
 from flask import request
 from app import app
-import json,db_service,tool
+import json, db_service, tool
 
 
 
@@ -11,8 +11,8 @@ import json,db_service,tool
 def search_scripts():
     db = db_service.Scripts()
     keyword = request.json.get('keyword')
-    if(keyword!=None and keyword.strip()==''):
-            keyword = None
+    if (keyword != None and keyword.strip() == ''):
+        keyword = None
     return db.search_scripts_by_name(keyword)
     # return json.dumps([{"id":"123","name":"JDK","ver":"1.7"},{"id":"223","name":"JDK","ver":"1.5"}]);
 
@@ -46,6 +46,6 @@ def save_script():
     print(request.json)
     script = db_service.Scripts()
     data = request.json
-    if(data.get('name').strip()=='' or data.get('version').strip()==''):
+    if (data.get('name').strip() == '' or data.get('version').strip() == ''):
         return tool.commonError();
     return script.insert(data)

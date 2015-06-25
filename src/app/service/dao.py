@@ -4,11 +4,13 @@ from pymongo import MongoClient
 from tool import response
 from tool import createId
 
+
 class PyConnect(object):
-    def __init__(self):
+    def __init__(self,collection):
         try:
             self.conn = MongoClient('localhost', 27017)
             self.db = self.conn.autoDeploy
+            self.coll = self.db[collection]
         except:
             print "连接失败"
             exit(0)
@@ -30,7 +32,7 @@ class PyConnect(object):
 
     def insert(self, data):
         try:
-            data[id]=createId()
+            data[id] = createId()
             self.coll.insert(data)
             return response().success()
         except:
@@ -49,6 +51,3 @@ class PyConnect(object):
             return response().success()
         except:
             return response().error("删除出现异常")
-
-
-
