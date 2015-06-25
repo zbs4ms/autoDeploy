@@ -2,16 +2,14 @@ __author__ = 'wang'
 #-*- coding: utf-8 -*-
 from flask import request
 from app import app
-import json
-import db_service
+import json,db_service,tool
+
 
 #取得部署流程列表
 @app.route('/get/processList')
 def get_processList():
-    #processList = [{"name":"云平台安装","id":"123"},{"name":"云平台控制","id":"321"}];
-    server = db_service.Process()
-    processList = server.get_processList()
-    return json.dumps(processList)
+    db = db_service.Process()
+    return db.get_processList()
 
 #取得指定流程的安装步骤列表
 @app.route('/get/processDetail/<id>')
@@ -32,8 +30,11 @@ def del_process():
 #保存安装流程
 @app.route('/post/save_process', methods=['POST'])
 def save_process():
-    #print(request.json.get('name'))
-    #print(request.json.get('process'))
-    server = db_service.Process()
-    req = server.save_process(request.json.get('name'),request.json.get('process'))
-    return json.dumps({"status":req,"message":""});
+    db = db_service.Process()
+    data=request.json
+    if(data.get('name').strip()==''):
+        return tool.commonError();
+    return db.save_process(data)
+
+
+

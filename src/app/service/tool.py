@@ -33,6 +33,11 @@ def createId():
     c = str(random.randint(0, 9999))
     return int(t+c)
 
+#通用错误包装方法
+def commonError(message=None):
+    if(message != None):
+        return json.dumps({"status":-1,"message":message});
+    return json.dumps({"status":-1,"message":"关键信息缺失"});
 
 class response:
     def __init__(self):

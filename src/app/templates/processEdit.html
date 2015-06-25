@@ -121,9 +121,7 @@
 
             var param = {"name": $scope.process_name, "process": $scope.process}
             $http.post('/post/save_process', param).success(function (data) {
-                if (data.status == -1) {
-                    alert(data.message);
-                } else {
+                if (response_check(data)) {
                     location.href = "/"
                 }
             }).error(function () {
@@ -143,7 +141,9 @@
         $scope.search_scripts = function () {
             var param = {"keyword": $scope.keyword}
             $http.post('/post/search_scripts', param).success(function (data) {
-                $scope.scripts = data;
+                if(response_check(data)){
+                    $scope.scripts = data.result;
+                }
             }).error(function () {
                 console.log("数据加载出错");
             });
