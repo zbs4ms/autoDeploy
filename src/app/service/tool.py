@@ -33,9 +33,10 @@ def getJsonByObject(obj):
 
 # 生成唯一ID
 def createId():
-    t = str(time.time()).replace('.', '')
-    c = random.randint(0, 9999)
-    return int(t + c)
+    t = str(time.time()).replace('.','');
+    c = str(random.randint(0, 9999))
+    return int(t+c)
+    
 
 
 # 通用错误包装方法
