@@ -39,10 +39,10 @@ def scriptCreate():
 def taskCreate(process_id):
     return render_template('createTask.html',process_id=process_id)
 
-@app.route('/task/config/<process_id>')
-def taskConfig(process_id):
-    print process_id
-    return render_template('taskConfig.html',process_id=process_id)
+@app.route('/task/config/<task_id>')
+def taskConfig(task_id):
+    print task_id
+    return render_template('taskConfig.html',task_id=task_id)
 
 @app.route('/task/execute/<task_id>')
 def taskExecute(task_id):
