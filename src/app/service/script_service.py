@@ -29,10 +29,8 @@ def del_script_by_id():
 # 通过Id取得安装脚本的信息
 @app.route('/get/script_detail/<id>')
 def get_script_by_id(id):
-    # print(id)
-    # return json.dumps({"name":"JDK","ver":"1.7","description":"xxx","dependents":[{"id":"1","name":"JDK","ver":"1.7"}]});
     server = db_service.Scripts()
-    req = server.get_script_by_id(request.json.get('id'))
+    req = server.get_script_by_id(id)
     return json.dumps({"status": req, "message": ""})
 
 

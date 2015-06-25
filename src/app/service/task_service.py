@@ -60,3 +60,8 @@ def test_connection():
 def get_target_list(task_id):
     print(task_id)
     return json.dumps(["192.0.0.1","192.0.0.2","192.0.0.3"])
+
+#目标机回调接口
+@app.route('/sub_task/call_back', methods=['POST'])
+def target_call_back():
+    print(request.json.get('data'))
