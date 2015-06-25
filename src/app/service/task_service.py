@@ -2,8 +2,7 @@ __author__ = 'wang'
 #-*- coding: utf-8 -*-
 from flask import request
 from app import app
-import json
-import db_service
+import json,db_service,tool
 
 #取得正在运行中的任务列表
 @app.route('/get/taskList')

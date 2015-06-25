@@ -35,8 +35,8 @@ class Process(PyConnect):
 
     #取得部署流程列表
     def get_processList(self):
-        list = self.find(field={'_id': 0, 'name': 1})
-        return tool.getDictByCursor(list)
+        response = self.find(field={'_id': 0, 'name': 1})
+        return response.toJson()
 
     #根据id取得安装步骤列表
     def get_process_detail_by_id(self,id):

@@ -2,8 +2,7 @@ __author__ = 'wang'
 # -*- coding: utf-8 -*-
 from flask import request
 from app import app
-import json
-import db_service
+import json,db_service,tool
 
 
 
@@ -48,5 +47,5 @@ def save_script():
     script = db_service.Scripts()
     data = request.json
     if(data.get('name').strip()=='' or data.get('version').strip()==''):
-        return json.dumps({"status": -1, "message": "关键数据缺失,不能保存"})
+        return tool.commonError();
     return script.insert(data)
