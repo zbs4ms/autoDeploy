@@ -12,7 +12,9 @@
                 <div class="jumbotron" style="min-height: 350px" ng-controller="processController">
                     <p>
                         <h2 ng-if="processList.length==0" class="text-center" style="color: #aaa;">没有数据</h2>
-                        <a ng-repeat="process in processList" class="btn btn-primary btn-lg br-20" href="/process/detail/((process.id))" role="button">((process.name))</a>
+                        <a ng-repeat="process in processList"
+                           class="btn btn-primary btn-lg br-20" style="min-width: 130px"
+                           href="/process/detail/((process.id))" role="button">((process.name))</a>
                     </p>
                 </div>
 
@@ -33,11 +35,10 @@
 {% block script %}
 <script>
     App.controller("processController", function($scope,$http) {
-        $scope.processList=[{"id":"123","name":"云平台安装"}];
         var get_processList=function(){
             $http.get('/get/processList').success(function(data){
-                if(data instanceof Array&&data.length>0){
-                    $scope.processList = data;
+                if(response_check(data)){
+                    $scope.processList = data.result;
                 }
             }).error(function(){
                 console.log("数据加载出错");

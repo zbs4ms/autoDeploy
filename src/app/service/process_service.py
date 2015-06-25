@@ -14,11 +14,11 @@ def get_processList():
 
 # 取得指定流程的安装步骤列表
 @app.route('/get/processDetail/<id>')
-def get_process_detail(id=None):
+def get_process_detail(id = None):
     if (id == None or id.strip() == ''):
         tool.commonError("id不能为空")
     db = db_service.Process()
-    return db.get_process_detail(id)
+    return db.get_process_detail_by_id(id)
 
 
 # 删除部署流程,status=0 表示成功 -1表示失败
@@ -28,7 +28,7 @@ def del_process():
     if (id == None or id.strip() == ''):
         tool.commonError("id不能为空")
     db = db_service.Process()
-    return db.del_process(id)
+    return db.del_process_by_id(id)
 
 
 # 保存安装流程
@@ -38,4 +38,5 @@ def save_process():
     data = request.json
     if (data.get('name').strip() == ''):
         return tool.commonError();
+    print(data)
     return db.save_process(data)

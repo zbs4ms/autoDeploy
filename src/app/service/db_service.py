@@ -20,7 +20,7 @@ def singleton(cls, *args, **kw):
 @singleton
 class Task(PyConnect):
     def __init__(self):
-        PyConnect.__init__(self,'task')
+        PyConnect.__init__(self, 'task')
 
     # 取得正在运行中的任务列表
     def get_taskList(self):
@@ -32,32 +32,36 @@ class Task(PyConnect):
 @singleton
 class Process(PyConnect):
     def __init__(self):
-        PyConnect.__init__(self,'process')
+        PyConnect.__init__(self, 'process')
 
     # 取得部署流程列表
     def get_processList(self):
-        response = self.find(field={'_id': 0, 'name': 1})
+        response = self.find(field={'_id': 0, 'id': 1, 'name': 1})
         return response.toJson()
 
     # 根据id取得安装步骤列表
     def get_process_detail_by_id(self, id):
-        list = self.find({'id': id}, {'_id': 0, 'scriptList': 1})
-        return tool.getDictByCursor(list)
+        response = self.find({'id': int(id)}, {'_id': 0, 'id': 1, 'name': 1, 'process': 1})
+        return response.toJson()
 
     # 删除部署流程,status=0 表示成功 -1表示失败
     def del_process_by_id(self, id):
-        response = self.remove({'id': id})
+        response = self.remove({'id': int(id)})
         return response.toJson()
 
-    def save_process(self,data):
-        response = self.insert(data)
+    def save_process(self, data):
+        if (data['id'] != None):
+            response = self.update({'id': data['id']}, data)
+        else:
+            response = self.insert(data)
         return response.toJson()
+
 
 # 安装脚本相关的class
 @singleton
 class Scripts(PyConnect):
     def __init__(self):
-        PyConnect.__init__(self,'script')
+        PyConnect.__init__(self, 'script')
 
     # 删除一个安装脚本
     def del_script_by_id(self, id):

@@ -5,7 +5,7 @@
         <a style="float: right" href="/" class="btn btn-info">
             <span  aria-hidden="true"></span>返回
         </a>
-        <h3 id="example-heading-new" >{{title}}</h3>
+        <h3 id="example-heading-new" >流程:((details.name))</h3>
     </div>
     <div class="row-fluid">
         <div class="span12">
@@ -24,12 +24,12 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="mod in details">
+                        <tr ng-repeat="mod in details.process">
                             <td>
                                 (($index+1))
                             </td>
                             <td>
-                                ((mod))
+                                ((mod.name))
                             </td>
                         </tr>
                         </tbody>
@@ -61,15 +61,11 @@
 <script>
     var id="{{process_id}}";
     App.controller("processDetailCtrl", function($scope,$http) {
-        $scope.details=[];
-
         $scope.remove=function(){
             if(window.confirm("确定删除？")){
                 var data={"id":id};
                 $http.post('/post/deleteProcess',data).success(function(data){
-                    if(data.status==-1){
-                        alert(data.message)
-                    }else{
+                    if(response_check(data)){
                         window.location="/";
                     }
                 }).error(function(){
@@ -91,7 +87,10 @@
 
         var get_details=function(){
             $http.get('/get/processDetail/'+id).success(function(data){
-                $scope.details = data;
+                if(response_check(data)){
+                    $scope.details = data.result[0];
+                    console.log($scope.details)
+                }
             }).error(function(){
                 console.log("数据加载出错");
             });

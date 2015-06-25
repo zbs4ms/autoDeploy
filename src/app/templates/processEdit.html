@@ -6,7 +6,7 @@
             <span aria-hidden="true"></span>返回
         </a>
         <input type="text" class="form-control" style="width: 300px" placeholder="请命个名呗"
-               aria-describedby="sizing-addon1" ng-model="process_name"/>
+               aria-describedby="sizing-addon1" ng-model=" details.name"/>
     </div>
     <div class="row">
         <div class="col-md-6">
@@ -69,7 +69,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="pcs in process">
+                            <tr ng-repeat="pcs in details.process">
                                 <td><a href="javascript:void(0)" ng-click="remove( (($index)) )">移除</a></td>
                                 <td>
                                     (($index+1))
@@ -109,8 +109,7 @@
     var id = "{{process_id}}";
     App.controller("processEditCtrl", function ($scope, $http) {
         $scope.scripts = [];
-        $scope.process = [];
-        $scope.process_name = "";
+        $scope.details = {id:0,name:"",process:[]};
         $scope.keyword = "";
 
         $scope.save_process = function () {
@@ -118,9 +117,7 @@
                 return false
             }
             ;//数据检查
-
-            var param = {"name": $scope.process_name, "process": $scope.process}
-            $http.post('/post/save_process', param).success(function (data) {
+            $http.post('/post/save_process', $scope.details).success(function (data) {
                 if (response_check(data)) {
                     location.href = "/"
                 }
@@ -130,12 +127,12 @@
         }
 
         $scope.remove = function (index) {
-            $scope.process.pop(index);
+            $scope.details.process.pop(index);
         }
 
         $scope.add_script = function (id, name, ver) {
             var data = {"id": id, "name": name + " " + ver}
-            $scope.process.push(data)
+            $scope.details.process.push(data)
         }
 
         $scope.search_scripts = function () {
@@ -157,28 +154,41 @@
         };
 
         $scope.edit_checkpoint = function (index) {
-            var data = $scope.process[index];
+            var data =  $scope.details.process[index];
             Bus.broadcast("open_checkpoint_modal", [data])
         }
 
         var save_checkpoint = function (checkpoint) {
-            $scope.process.push(checkpoint)
+            $scope.details.process.push(checkpoint)
         }
         Bus.regEvent("save_checkpoint", save_checkpoint)
 
         var value_check = function () {
             var status = true;
-            if ($scope.process_name.trim() == "") {
+            if ( $scope.details.name.trim() == "") {
                 alert("请填写名字")
                 status = false;
             }
-            if ($scope.process == null || $scope.process.length == 0) {
+            if ( $scope.details.process == null ||  $scope.details.process.length == 0) {
                 alert("请选择安装流程")
                 status = false;
             }
             return status;
         }
 
+        var get_details=function(){
+            console.log(id)
+            if(id==null||id=='')return;
+            $http.get('/get/processDetail/'+id).success(function(data){
+                if(response_check(data)){
+                    $scope.details = data.result[0];
+                }
+            }).error(function(){
+                console.log("数据加载出错");
+            });
+        }
+
+        get_details();
         $scope.search_scripts();
     });
 

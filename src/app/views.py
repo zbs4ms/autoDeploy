@@ -10,13 +10,11 @@ def home():
 
 @app.route('/process/detail/<id>')
 def processDetail(id):
-    process_name="[Name]"
-    return render_template('processDetail.html',title=process_name,process_id=id)
+    return render_template('processDetail.html',process_id=id)
 
 @app.route('/process/edit/<id>')
 def processEdit(id):
-    process_name="[Name]"
-    return render_template('processEdit.html',title=process_name,id=id)
+    return render_template('processEdit.html',process_id=id)
 
 @app.route('/process/new')
 def processNew():

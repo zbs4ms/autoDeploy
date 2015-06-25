@@ -32,10 +32,11 @@ class PyConnect(object):
 
     def insert(self, data):
         try:
-            data[id] = createId()
+            data['id'] = createId()
             self.coll.insert(data)
             return response().success()
         except:
+
             return response().error("插入出现异常")
 
     def update(self, data, setdata):

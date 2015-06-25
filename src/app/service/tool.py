@@ -16,7 +16,9 @@ def getDictByJson(data):
 
 # mongo find 的类型转dict
 def getDictByCursor(data):
-    if (data==None or data.count() <= 0):
+    if (data == None):
+        return None
+    if(data.count() <= 0):
         return None
     array = []
     for i in data:
@@ -33,10 +35,9 @@ def getJsonByObject(obj):
 
 # 生成唯一ID
 def createId():
-    t = str(time.time()).replace('.','');
+    t = str(time.time()).replace('.', '');
     c = str(random.randint(0, 9999))
-    return int(t+c)
-    
+    return int(t + c)
 
 
 # 通用错误包装方法
