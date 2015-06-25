@@ -18,3 +18,30 @@ def getDictByCursor(data):
     for i in data:
         array.append(i)
     return array;
+
+#对象转json
+def getJsonByObject(obj):
+    d = {}
+    d.update(obj.__dict__)
+    return json.dumps(d)
+
+
+class response:
+    def __init__(self):
+        self.status=0
+        self.message=""
+        self.result=[]
+
+    def error(self,mesg=None):
+        self.status=-1
+        self.message=mesg
+        return self
+
+    def success(self,result=[]):
+        self.status=0
+        self.result=result
+        return self
+
+    def toJson(self):
+        self.result=getDictByCursor(self.result)
+        return getJsonByObject(self)

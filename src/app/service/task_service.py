@@ -8,10 +8,9 @@ import db_service
 #取得正在运行中的任务列表
 @app.route('/get/taskList')
 def get_taskList():
-    server = db_service.Task()
-    tasklist = server.get_taskList()
+    db = db_service.Task()
     #tasklist = [{"name":"云平台安装"},{"name":"云平台控制"}];
-    return json.dumps(tasklist)
+    return db.get_taskList()
 
 #创建任务
 @app.route('/post/create_task', methods=['POST'])

@@ -44,7 +44,7 @@
                     <br/>
 
                     <div class="input-group">
-                        <input type="text" placeholder="Search for..." class="form-control" ng-model="keyword" ng-keyup="keyup_search($event)">
+                        <input type="text" placeholder="请输入需要查找的脚本名称" class="form-control" ng-model="keyword" ng-keyup="keyup_search($event)">
                         <span class="input-group-btn">
                             <button type="button" class="btn btn-default" ng-click="search_scripts()">Search</button>
                         </span>
@@ -67,15 +67,13 @@
 <script>
     App.controller("scriptCtrl", function ($scope, $http) {
         $scope.scripts = [];
-        $scope.keyword = "";
+        $scope.keyword = null;
 
         $scope.remove = function (id) {
             if(window.confirm("你确定?!")){
                 var param = {"id": id}
                 $http.post('/post/del_script', param).success(function (data) {
-                    if (data.status == -1) {
-                        alert(data.message);
-                    }
+                    response_check(data);
                 }).error(function () {
                     console.log("服务器连接失败");
                 });
@@ -85,7 +83,9 @@
         $scope.search_scripts = function () {
             var param = {"keyword": $scope.keyword}
             $http.post('/post/search_scripts', param).success(function (data) {
-                $scope.scripts = data;
+                if (response_check(data)) {
+                    $scope.scripts = data.result;
+                }
             }).error(function () {
                 console.log("数据加载出错");
             });

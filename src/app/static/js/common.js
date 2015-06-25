@@ -29,6 +29,14 @@ function IpCheck(ip) {
     return true;
 }
 
+function response_check(data){
+    if (data.status == -1) {
+        alert(data.message);
+        return false
+    }
+    return true
+}
+
 var  Bus=new EventDispatcher();//消息总线
 var  App = angular.module("App", []);
 App.config(function($interpolateProvider) {

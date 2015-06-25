@@ -10,24 +10,25 @@
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <button style="float: right" class="btn btn-default" data-toggle="modal" ng-click="test_click()" data-target="#console">测试脚本</button>
-                    <a href="javascript:void(0)" ng-click="tab_click('bash')" ng-class="{'selected_target':detail.script.type=='bash'}">Bash
+                    <button style="float: right" class="btn btn-default" data-toggle="modal" ng-click="test_click()">
+                        测试脚本
+                    </button>
+                    <a href="javascript:void(0)" ng-click="tab_click('bash')"
+                       ng-class="{'selected_target':detail.script.type=='bash'}">Bash
                         Shell</a>
                     <span style="margin-left: 30px "></span>
-                    <a href="javascript:void(0)" ng-click="tab_click('expect')" ng-class="{'selected_target':detail.script.type=='expect'}">Expect
+                    <a href="javascript:void(0)" ng-click="tab_click('expect')"
+                       ng-class="{'selected_target':detail.script.type=='expect'}">Expect
                         Shell</a>
-
                 </div>
-                <div class="panel-body">
-                    <textarea id="bash_shell"
-                              ng-model="detail.script.bash_shell" placeholder="请输入 BASH SHELL 脚本"
-                              class="form-control script_edit_window" style="height: 50%"
-                              ng-class="{'hide':detail.script.type!='bash'}"></textarea>
-                    <textarea id="expect_shell"
-                              ng-mode="detail.script.expect_shell" placeholder="请输入 EXPECT SHELL 脚本"
-                              class="form-control script_edit_window" style="height: 50%"
-                              ng-class="{'hide':detail.script.type!='expect'}"></textarea>
-                </div>
+                <textarea id="bash_shell"
+                          ng-model="detail.script.bash_shell" placeholder="请输入 BASH SHELL 脚本"
+                          class="form-control script_edit_window" style="height: 50%"
+                          ng-class="{'hide':detail.script.type!='bash'}"></textarea>
+                <textarea id="expect_shell" disabled="disabled"
+                          ng-mode="detail.script.expect_shell" placeholder="暂时不可用"
+                          class="form-control script_edit_window" style="height: 50%"
+                          ng-class="{'hide':detail.script.type!='expect'}"></textarea>
             </div>
 
             <div class="panel panel-default">
@@ -35,7 +36,47 @@
                     <h3 class="panel-title">执行结果检查</h3>
                 </div>
                 <div class="panel-body">
-                    开发中。。。
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>匹配控制台关键字</th>
+                            <th>类型</th>
+                            <th>输出到日志的消息</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="c in detail.checkList"
+                            ng-class="{'danger':c.type=='error','success':c.type=='success'}">
+                            <td>
+                                <span>((c.keyword))</span>
+                            </td>
+                            <td>
+                                <span ng-if="c.type=='success'">成功</span>
+                                <span ng-if="c.type=='error'">失败</span>
+                            </td>
+                            <td>
+                                <span>((c.message))</span>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input class="form-control" ng-model="check_option.keyword">
+                            </td>
+                            <td>
+                                <select class="form-control" ng-model="check_option.type">
+                                    <option value="success">成功</option>
+                                    <option value="error">失败</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input class="form-control" ng-model="check_option.message">
+                            </td>
+                            <td><a href="javascript:void(0)" ng-click="add_resultCheck()" class="btn">添加</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -54,33 +95,52 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 </div>
 
 
-
 <script>
-    App.controller("detailCtrl", function ($scope,$http) {
-        $scope.tab_click=function(type){
-            $scope.detail.script.type=type;
+    App.controller("detailCtrl", function ($scope, $http) {
+        $scope.check_option;
+        $scope.tab_click = function (type) {
+            $scope.detail.script.type = type;
         }
 
-        $scope.test_click=function(){
+        $scope.add_resultCheck = function () {
+            $scope.detail.checkList.push($scope.check_option)
+            init_resultCheck();
+            console.log($scope.detail)
+        }
+
+        $scope.test_click = function () {
+            if (!$scope.valueCheck()) {
+                return false;
+            }
             $(".console_window").html("执行中请等待....")
-            var param=$scope.detail.script
-            $http.post('/post/test/script',param).success(function (data) {
-                var content="";
-                for(i in data){
-                    content+=data[i]+"<br/>"
+            $('#console').modal('show');
+            var param = $scope.detail.script
+            $http.post('/post/test/script', param).success(function (data) {
+                var content = "";
+                for (i in data) {
+                    content += data[i] + "<br/>"
                 }
                 $(".console_window").html(content)
             }).error(function () {
                 console.log("数据加载出错");
             });
         }
+
+        var init_resultCheck = function () {
+            $scope.check_option = {
+                keyword: "",
+                type: "success",
+                message: ""
+            }
+        }
+
+        init_resultCheck();
 
         $('#console').on('hidden.bs.modal', function (e) {
             //alert(1)
