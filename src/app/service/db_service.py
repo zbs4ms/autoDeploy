@@ -56,6 +56,10 @@ class Process(PyConnect):
             response = self.insert(data)
         return response.toJson()
 
+    def get_parameter(self,id):
+        response = self.find({'id':int(id)},{'_id':0,'parameter':1})
+        return response.toJson()
+
 
 # 安装脚本相关的class
 @singleton
@@ -79,6 +83,10 @@ class Scripts(PyConnect):
             response = self.find({"name": re.compile(name)}, {'_id': 1, 'name': 1, 'ver': 1})
         else:
             response = self.find(field={'_id': 0, 'name': 1, 'ver': 1})
+        return response.toJson()
+
+    def get_parameter(self,id):
+        response = self.find({'id':int(id)},{'_id':0,'parameter':1})
         return response.toJson()
 
 
