@@ -6,13 +6,13 @@ from tool import createId
 
 
 class PyConnect(object):
-    def __init__(self,collection):
+    def __init__(self, collection):
         try:
             self.conn = MongoClient('localhost', 27017)
             self.db = self.conn.autoDeploy
             self.coll = self.db[collection]
-        except:
-            print "连接失败"
+        except Exception as e:
+            print e
             exit(0)
 
     def __del__(self):
@@ -27,28 +27,32 @@ class PyConnect(object):
             else:
                 result = self.coll.find(query, field)
             return response().success(result)
-        except:
+        except Exception as e:
+            print e
             return response().error("查找出现异常")
 
     def insert(self, data):
         try:
-            data['id'] = createId()
+            id = createId()
+            data['id'] = id
             self.coll.insert(data)
-            return response().success()
-        except:
-
+            return response().success({'id': id})
+        except Exception as e:
+            print e
             return response().error("插入出现异常")
 
     def update(self, data, setdata):
         try:
             self.coll.update(data, {'$set': setdata})
             return response().success()
-        except:
+        except Exception as e:
+            print e
             return response().error("更新出现异常")
 
     def remove(self, data):
         try:
             self.coll.remove(data)
             return response().success()
-        except:
+        except Exception as e:
+            print e
             return response().error("删除出现异常")

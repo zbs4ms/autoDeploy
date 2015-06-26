@@ -14,9 +14,11 @@ def get_processList():
 
 # 取得指定流程的安装步骤列表
 @app.route('/get/processDetail/<id>')
-def get_process_detail(id = None):
-    if (id == None or id.strip() == ''):
-        tool.commonError("id不能为空")
+def get_process_detail(id=None):
+    try:
+        id = int(id)
+    except:
+        return tool.commonError("id错误")
     db = db_service.Process()
     return db.get_process_detail_by_id(id)
 
@@ -24,9 +26,10 @@ def get_process_detail(id = None):
 # 删除部署流程,status=0 表示成功 -1表示失败
 @app.route('/post/deleteProcess', methods=['POST'])
 def del_process():
-    id = request.json.get('id')
-    if (id == None or id.strip() == ''):
-        tool.commonError("id不能为空")
+    try:
+        id = int(request.json.get('id'))
+    except:
+        return tool.commonError("id错误")
     db = db_service.Process()
     return db.del_process_by_id(id)
 
@@ -40,3 +43,16 @@ def save_process():
         return tool.commonError();
     print(data)
     return db.save_process(data)
+
+
+# 取得安装流程所需的变量列表
+@app.route('/get/process/params/<process_id>')
+def get_process_params(process_id):
+    try:
+        id = int(process_id)
+    except:
+        return tool.commonError("id错误")
+    db = db_service.Process()
+    #return db.get_process_params(id)
+    return json.dumps([{"name": "user", "value": "", "description": "用户名称"}, {"name": "HOST", "value": ""}])
+

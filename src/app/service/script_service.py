@@ -20,17 +20,23 @@ def search_scripts():
 # 通过ID删除脚本
 @app.route('/post/del_script', methods=['POST'])
 def del_script_by_id():
-    # print(request.json.get('id'))
+    try:
+        id=int(request.json.get('id'))
+    except:
+        return tool.commonError("id 错误")
     db = db_service.Scripts();
-    return db.del_script_by_id(request.json.get('id'))
+    return db.del_script_by_id(id)
 
 
 # 通过Id取得安装脚本的信息
-@app.route('/get/script_detail/<id>')
-def get_script_by_id(id):
-    server = db_service.Scripts()
-    req = server.get_script_by_id(id)
-    return json.dumps({"status": req, "message": ""})
+@app.route('/get/script_detail/<script_id>')
+def get_script_by_id(script_id):
+    try:
+        id=int(script_id)
+    except:
+        return tool.commonError("id 错误")
+    db = db_service.Scripts()
+    return db.get_script_by_id(id)
 
 
 # 取得测试环境的执行结果
@@ -48,4 +54,4 @@ def save_script():
     data = request.json
     if (data.get('name').strip() == '' or data.get('version').strip() == ''):
         return tool.commonError();
-    return script.insert(data)
+    return script.save_script(data)

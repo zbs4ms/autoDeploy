@@ -46,10 +46,8 @@
                 return false;
             }
             $http.post('/post/save/script',$scope.detail).success(function (data) {
-                if (data.status == -1) {
-                    alert(data.message);
-                }else{
-                    location.href="/"
+                if(response_check(data)){
+                    location.href="/script/overview"
                 }
             }).error(function () {
                 console.log("数据加载出错");
@@ -88,7 +86,9 @@
         var get_detail = function () {
             if(id!=''){
                 $http.get('/get/script_detail/'+id).success(function (data) {
-                    $scope.detail = data;
+                    if(response_check(data)){
+                        $scope.detail = data.result[0];
+                    }
                 }).error(function () {
                     console.log("数据加载出错");
                 });

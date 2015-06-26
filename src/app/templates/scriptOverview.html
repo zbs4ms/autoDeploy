@@ -73,7 +73,9 @@
             if(window.confirm("你确定?!")){
                 var param = {"id": id}
                 $http.post('/post/del_script', param).success(function (data) {
-                    response_check(data);
+                    if (response_check(data)) {
+                        $scope.search_scripts();
+                    }
                 }).error(function () {
                     console.log("服务器连接失败");
                 });

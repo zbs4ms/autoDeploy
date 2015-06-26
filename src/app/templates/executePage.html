@@ -7,11 +7,12 @@
             <h4>目标机</h4>
             <div class="list-group" style="height: 450px;overflow-y: auto">
                 <a href="#" class="list-group-item"
-                   ng-repeat="t in target_list"
-                   ng-click="target_click( ((t.id)) )"
-                   ng-class="{'selected_target':selected==t.id,'':selected!=t.id,'list-group-item-success':t.status==1, 'list-group-item-info':t.status==0, 'list-group-item-danger':t.status==-1}">
-                    <div class="col-md-4"><p class="list-group-item-text">((t.ip))</p></div>
-                    <div class="col-md-8"><p class="list-group-item-text">((t.message))</p></div>
+                   ng-repeat="st in subtask"
+                   ng-click="target_click( ((st.ip)) )"
+                   ng-class="{'selected_target':selected==st.ip,'list-group-item-success':t.status==100,
+                   'list-group-item-warning':t.status==0, 'list-group-item-info':t.status==1, 'list-group-item-danger':t.status==-1}">
+                    <div class="col-md-4"><p class="list-group-item-text">((st.ip))</p></div>
+                    <div class="col-md-8"><p class="list-group-item-text">((st.status))</p></div>
                     <br/>
                 </a>
             </div>
@@ -41,7 +42,7 @@
     var id='{{task_id}}';
     var isDone=false
     App.controller("executeCtrl", function ($scope, $http) {
-        $scope.target_list=[];
+        $scope.subtask=[];
         $scope.target_log="";
         $scope.selected="";
 
@@ -49,13 +50,15 @@
             $scope.selected=id;
             get_target_log();
             console.log(id)
-
         }
 
         var get_target_list=function(){
             if(id!=null&&id!=""){
                 $http.get('/get/task_list/detail/'+id).success(function(data){
-                    $scope.target_list=data;
+                    if(response_check(data)){
+                        $scope.subtask=data.result[0].subtask;
+                        console.log($scope.subtask)
+                    }
                 }).error(function(){
                     console.log("数据加载出错");
                 });
@@ -64,16 +67,19 @@
 
         var get_target_log=function(){
             if ($scope.selected != null && $scope.selected != "") {
-                $http.get('/get/task/log/' + $scope.selected).success(function (data) {
-                    $scope.target_log = data;
+                var param={task_id:id,ip:$scope.selected}
+                $http.get('/post/task/log',param).success(function (data) {
+                    if(response_check(data)){
+                        $scope.target_log =data.result[0];
+                    }
                 }).error(function () {
                     console.log("数据加载出错");
                 });
             }
         }
         get_target_list()
-        window.setInterval(get_target_list,20000);
-        window.setInterval(get_target_log,20000);
+        //window.setInterval(get_target_list,20000);
+        //window.setInterval(get_target_log,20000);
     });
 
 </script>
