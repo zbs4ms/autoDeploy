@@ -1,0 +1,5 @@
+aaaa = 1111
+pip jdk1.5
+scp aaa.txt $ip:$port
+echo $name，赏一个呗！
+
