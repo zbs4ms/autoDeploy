@@ -1,0 +1,25 @@
+#!/usr/bin/expect -f
+
+set cip=[lindex $argv 0]
+set cuser=[lindex $argv 1]
+set cpasswd=[lindex $argv 2]
+
+#--添加ssh信任
+spawn scp ~/.ssh/id_rsa.pub $cuser@$cip:.ssh/id_service.pub
+expect {
+  "yes/no" { send "yes\r"; exp_continue}
+  "password:" { send "$cpasswd\r" }
+}
+expect "]#"
+spawn ssh $cuser@$cip
+expect {
+  "yes/no" { send "yes\r"; exp_continue}
+  "password:" { send "$cpasswd\r" }
+}
+expect "]#"
+send touch ~/.ssh/authorized_keys
+expect "]#"
+send cat ~/.ssh/id_service.pub >> ~/.ssh/authorized_keys
+interact
+
+
