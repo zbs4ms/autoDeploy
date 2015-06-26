@@ -3,6 +3,7 @@
 import json
 import time
 import random
+import httplib
 
 # 数据转json
 def getJsonByDict(data):
@@ -66,3 +67,20 @@ class response:
     def toJson(self):
         self.result = getDictByCursor(self.result)
         return getJsonByObject(self)
+
+
+class HttpClientByPost(object):
+    def __init__(self,ip,path,data):
+        self.data = data
+        self.ip = ip
+        self.path = path
+
+    def connect(self):
+        try:
+            httpClient = httplib.HTTPConnection(self.ip,self.host,timeout=30)
+            httpClient.request('POST',self.path,self.data)
+        except Exception, e:
+            print e
+        finally:
+            if httpClient:
+                httpClient.close()
