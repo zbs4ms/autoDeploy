@@ -2,10 +2,6 @@
 {% block content %}
 <div class="container-fluid" ng-controller="taskCtrl">
     <div class="row-fluid title">
-        <a style="float: right" href="/task/create/{{process_id}}" class="btn btn-info">
-            <span aria-hidden="true"></span>返回
-        </a>
-
         <h3 id="example-heading-new">任务配置</h3>
     </div>
     <div class="row">
@@ -25,8 +21,8 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="t in target_list" style="cursor:pointer" ng-click="target_click( ((t)) )">
-                                <td><span ng-class="{'selected_target':selected== t }">((t))</span>
+                            <tr ng-repeat="t in task.subtask" style="cursor:pointer" ng-click="target_click( (($index)) )">
+                                <td><span ng-class="{'selected_target':selected== $index }">((t.ip))</span>
                                 </td>
                             </tr>
                             </tbody>
@@ -53,13 +49,7 @@
                             <td>((param.description))</td>
                             <td><input ng-model="param.value" class="form-control"></td>
                         </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <button class="btn btn-block btn-info" ng-click="save_param()">Save</button>
-                            </td>
-                        </tr>
+
                         </tbody>
                     </table>
 
@@ -81,30 +71,23 @@
     var id = '{{task_id}}';
     App.controller("taskCtrl", function ($scope, $http) {
         $scope.param_list = [];
-        $scope.target_list = [];
+        $scope.task={};
         $scope.selected = "all";
-        $scope.param_config = {};
-
         $scope.target_click = function (t) {
             $scope.selected = t;
-            init();
-        }
-
-        $scope.save_param = function () {
-            console.log($scope.param_list)
-            $scope.param_config[$scope.selected] = $scope.param_list;
-            console.log($scope.param_config)
+            if(t!='all'){
+                if($scope.task.subtask[t]['params']==null){
+                    $scope.task.subtask[t]['params'] = jQuery.extend(true, [],  $scope.task.params);
+                }
+                $scope.param_list= $scope.task.subtask[t].params;
+            }else{
+                $scope.param_list= $scope.task.params;
+            }
         }
 
         $scope.submit = function () {
-            if (!valueCheck()) {
-                return false;
-            }
-            var param = {"params": $scope.param_config, "taskId": id}
-            $http.post('/post/save/taskParams', param).success(function (data) {
-                if (data.status == -1) {
-                    alert(data.message);
-                } else {
+            $http.post('/post/update_task', $scope.task).success(function (data) {
+                if (response_check(data)) {
                     location.href = "/task/execute/" + id;
                 }
             }).error(function () {
@@ -112,38 +95,37 @@
             });
         }
 
-        var valueCheck = function () {
-            if ($scope.param_config.all == null) {
-                alert("全局变量不能为空")
-                return false;
-            }
-            return true;
-        }
-
-        var init = function () {
-            $scope.param_list = param_template;
-        }
-
-        var param_template;
         var get_params = function () {
-            $http.get('/get/task/params/' + id).success(function (data) {
-                param_template = jQuery.extend(true, {}, data);
-                $scope.param_list = data;
+            $http.get('/get/process/params/' + id).success(function (data) {
+                if (response_check(data)) {
+                    if(data.length==0){
+                        location.href = "/task/execute/" + id;
+                        return
+                    }
+                    if($scope.task['params'] ==null){
+                        $scope.task['params'] = jQuery.extend(true,[], data);
+                    }
+                    $scope.param_list= $scope.task.params;
+
+                }
             }).error(function () {
                 console.log("数据加载出错");
             });
         }
 
-        var get_target_list = function () {
-            $http.get('/get/target_list/' + id).success(function (data) {
-                param_template = data;
-                $scope.target_list = data;
+        var get_task = function () {
+            $http.get('/get/task/' + id).success(function (data) {
+                if (response_check(data)) {
+                    $scope.task = data.result[0]
+                }
             }).error(function () {
                 console.log("数据加载出错");
             });
         }
-        get_target_list();
-        get_params()
+        get_task();
+        get_params();
+
+
     });
 </script>
 {% endblock %}

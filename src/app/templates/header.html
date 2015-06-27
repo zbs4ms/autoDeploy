@@ -23,8 +23,8 @@
                     <ul class="dropdown-menu" role="menu">
                         <li ng-if="taskList.length==0"><span style="margin-left: 5px">没有运行的任务</span></li>
                         <li ng-repeat="task in taskList">
-                            <a class="text-center" href="javascript:void(0)"ng-click="view_task">
-                                <span>((task.name))</span>
+                            <a class="text-center" href="javascript:void(0)"ng-click="view_task( ((task.id)) , ((task.status)) )">
+                                <span>任务号:((task.id))</span>
                             </a>
                         </li>
                     </ul>
@@ -37,14 +37,18 @@
 <script>
     App.controller("headerController", function($scope,$http) {
         $scope.taskList=[];
-        $scope.view_task=function(taskId){
-            alert(taskId)//TODO 连接进入执行界面，继续安装
+        $scope.view_task=function(taskId,status){
+            if(status==0){
+                location.href = "/task/config/" + taskId
+            }
+            if(status==1){
+                location.href = "/task/execute/" + taskId
+            }
         };
         var get_taskList=function(){
             $http.get('/get/taskList').success(function(data){
                 if(response_check(data)){
                     $scope.taskList = data.result;
-                    console.log(data);
                 }
             }).error(function(){
                 console.log("数据加载出错");

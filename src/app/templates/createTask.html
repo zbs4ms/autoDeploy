@@ -14,7 +14,7 @@
             <table class="table">
 
                 <tbody>
-                <tr ng-repeat="tr in target_list">
+                <tr ng-repeat="tr in task.subtask">
                     <td>((tr.ip))</td>
                     <td>((tr.user))</td>
                     <td>((tr.password))</td>
@@ -47,7 +47,7 @@
 <script>
     var id = '{{process_id}}';
     App.controller("taskCtrl", function ($scope, $http) {
-        $scope.target_list = [];
+        $scope.task = {process_id: id, status:0, subtask: []};
         $scope.target;
         $scope.add_target = function () {
             if (!valueCheck()) {
@@ -55,37 +55,32 @@
             }
             var param = {"target": $scope.target};
             $http.post('/post/test/connection', param).success(function (data) {
-                if (data.status == -1) {
-                    alert(data.message);
-                    return;
+                if (response_check(data)) {
+                    $scope.task.subtask.push($scope.target);
+                    init();
                 }
-                $scope.target_list.push($scope.target)
-                init();
             }).error(function () {
                 console.log("数据加载出错");
             });
         }
 
         $scope.remove = function (index) {
-            $scope.target_list.pop(index);
+            delete $scope.task.subtask.pop(index);
         }
 
         $scope.create_task = function () {
-            if ($scope.target_list == null || $scope.target_list.length == 0) {
+            if ($scope.task.subtask.length == 0) {
                 alert("请填入目标机信息")
                 return false;
             }
-            var param = {"targetList": $scope.target_list}
-            $http.post('/post/create_task', param).success(function (data) {
-                if (data.status == -1) {
-                    alert(data.message);
-                    return;
+            $http.post('/post/create_task', $scope.task).success(function (data) {
+                if (response_check(data)) {
+                    if (data.result.id == null) {
+                        alert("保存出错")
+                        return;
+                    }
+                    location.href = "/task/config/" + data.result.id
                 }
-                if (data.id == null) {
-                    alert("数据加载出错");
-                    //return;
-                }
-                location.href = "/task/config/" + data.id
             }).error(function () {
                 console.log("数据加载出错");
             });
@@ -117,7 +112,9 @@
             $scope.target = {
                 ip: "",
                 user: "",
-                password: ""
+                password: "",
+                status: 0,
+                log: "连接成功"
             }
         }
         init();

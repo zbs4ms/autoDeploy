@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import json
-import time
-import random
-import httplib
-
+import json, random, time,httplib
+from  pymongo.cursor import Cursor
 # 数据转json
 def getJsonByDict(data):
     return json.dumps(data)
@@ -17,9 +14,9 @@ def getDictByJson(data):
 
 # mongo find 的类型转dict
 def getDictByCursor(data):
-    if (data == None):
-        return None
-    if(data.count() <= 0):
+    if (not isinstance(data, Cursor)):
+        return data
+    if (data.count() <= 0):
         return None
     array = []
     for i in data:

@@ -31,10 +31,10 @@
                                     ((scr.name))
                                 </td>
                                 <td>
-                                    ((scr.ver))
+                                    ((scr.version))
                                 </td>
                                 <td><a href="javascript:void(0)"
-                                       ng-click="add_script( ((scr.id)),((scr.name)),((scr.ver)) )"> 添加</a></td>
+                                       ng-click="add_script( ((scr.id)),((scr.name)),((scr.version)) )"> 添加</a></td>
                             </tr>
 
                             </tbody>
@@ -109,7 +109,7 @@
     var id = "{{process_id}}";
     App.controller("processEditCtrl", function ($scope, $http) {
         $scope.scripts = [];
-        $scope.details = {id:0,name:"",process:[]};
+        $scope.details = {id:null,name:"",process:[]};
         $scope.keyword = "";
 
         $scope.save_process = function () {
