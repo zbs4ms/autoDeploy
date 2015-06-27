@@ -105,9 +105,19 @@ class Scripts(PyConnect):
         return response.toJson()
 
 
+
 if __name__ == '__main__':
-    db = Task()
-    db.remove({"id": 1435307487061927})
+    #db = Task()
+    #db.remove({"id": 1435307487061927})
     #db.update({'id': 1435307487061927}, {'subtask': [{'ip':'1'},{'ip':'2'}]})
-    print db.get_subtask_by_taskId(1435307487061927)
-    print db.get_taskList()
+    #print db.get_subtask_by_taskId(1435307487061927)
+    #print db.get_taskList()
+    #analysis_param("@QES @1233 &ANS =abcc &CHE =yyzz")
+
+    data = "jjk; $aaa jkjkj jjjk kjkjl $bbbbb jkjkl; ioqi3nnknjk;\njkklj\t\n  $aaaa"
+    matchObj = re.findall(r'\$(\w+)', data)
+    if matchObj:
+        print matchObj
+
+
+

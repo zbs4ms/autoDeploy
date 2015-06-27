@@ -1,150 +1,96 @@
-<div id="detail" style="display: none" ng-controller="detailCtrl">
-    <div class="row-fluid title">
-        <a style="float: right" href="javascript:void(0)" ng-click="back()" class="btn btn-info">
-            <span aria-hidden="true"></span>返回
-        </a>
-
-        <h3>编辑脚本</h3>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <button style="float: right" class="btn btn-default" data-toggle="modal" ng-click="test_click()">
-                        测试脚本
-                    </button>
-                    <a href="javascript:void(0)" ng-click="tab_click('bash')"
-                       ng-class="{'selected_target':detail.script.type=='bash'}">Bash
-                        Shell</a>
-                    <span style="margin-left: 30px "></span>
-                    <a href="javascript:void(0)" ng-click="tab_click('expect')"
-                       ng-class="{'selected_target':detail.script.type=='expect'}">Expect
-                        Shell</a>
-                </div>
-                <textarea id="bash_shell"
-                          ng-model="detail.script.bash_shell" placeholder="请输入 BASH SHELL 脚本"
-                          class="form-control script_edit_window" style="height: 50%"
-                          ng-class="{'hide':detail.script.type!='bash'}"></textarea>
-                <textarea id="expect_shell" disabled="disabled"
-                          ng-mode="detail.script.expect_shell" placeholder="暂时不可用"
-                          class="form-control script_edit_window" style="height: 50%"
-                          ng-class="{'hide':detail.script.type!='expect'}"></textarea>
-            </div>
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">执行结果检查</h3>
-                </div>
-                <div class="panel-body">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>匹配控制台关键字</th>
-                            <th>类型</th>
-                            <th>输出到日志的消息</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="c in detail.checkList"
-                            ng-class="{'danger':c.type=='error','success':c.type=='success'}">
-                            <td>
-                                <span>((c.keyword))</span>
-                            </td>
-                            <td>
-                                <span ng-if="c.type=='success'">成功</span>
-                                <span ng-if="c.type=='error'">失败</span>
-                            </td>
-                            <td>
-                                <span>((c.message))</span>
-                            </td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input class="form-control" ng-model="check_option.keyword">
-                            </td>
-                            <td>
-                                <select class="form-control" ng-model="check_option.type">
-                                    <option value="success">成功</option>
-                                    <option value="error">失败</option>
-                                </select>
-                            </td>
-                            <td>
-                                <input class="form-control" ng-model="check_option.message">
-                            </td>
-                            <td><a href="javascript:void(0)" ng-click="add_resultCheck()" class="btn">添加</a></td>
-                        </tr>
-                        </tbody>
-                    </table>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+     ng-controller="checkpointCtrl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h4>检查点</h4>
                 </div>
             </div>
-        </div>
-        <div class="col-md-12">
-            <button class="btn btn-large btn-block btn-info" ng-click="save_script()" type="button">保存</button>
-        </div>
-    </div>
-    <!-- Modal -->
-    <div class="modal fade" id="console" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="min-width: 900px;">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="panel panel-default">
-                        <div class="panel-body console_window" style="min-height:400px;overflow-y: auto">
-
-                        </div>
+            <div class="modal-body">
+                <div class="row br-20">
+                    <div class="col-md-2">
+                        检查对象
+                    </div>
+                    <div class="col-md-5">
+                        <select class="width-100" ng-model="checkpoint.check_target.type">
+                            <option value="all">全部机器</option>
+                            <option value="custom">特定IP</option>
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <input ng-disabled="checkpoint.check_target.type!='custom'" type="text" class="width-100"
+                               ng-model="checkpoint.check_target.value">
                     </div>
                 </div>
+                <div class="row br-20">
+                    <div class="col-md-2">
+                        检查内容
+                    </div>
+                    <div class="col-md-5">
+                        <select class="width-100" ng-model="checkpoint.check_content.type">
+                            <option value="success">执行成功</option>
+                            <option value="fail">执行失败</option>
+                            <option value="sendback">返回消息内容</option>
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <input ng-disabled="checkpoint.check_content.type!='sendback'" type="text" class="width-100"
+                               ng-model="checkpoint.check_content.value">
+                    </div>
+                </div>
+                <div class="row br-20">
+                    <div class="col-md-2">
+                        执行操作
+                    </div>
+                    <div class="col-md-5">
+                        <select class="width-100" ng-model="checkpoint.execute.type">
+                            <option value="continue">继续执行</option>
+                            <option value="end">终止执行</option>
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="save()">Save</button>
             </div>
         </div>
     </div>
 </div>
 
-
 <script>
-    App.controller("detailCtrl", function ($scope, $http) {
-        $scope.check_option;
-        $scope.tab_click = function (type) {
-            $scope.detail.script.type = type;
-        }
+    App.controller("checkpointCtrl", function ($scope) {
+        $scope.checkpoint;
 
-        $scope.add_resultCheck = function () {
-            $scope.detail.checkList.push($scope.check_option)
-            init_resultCheck();
-            console.log($scope.detail)
-        }
-
-        $scope.test_click = function () {
-            if (!$scope.valueCheck()) {
-                return false;
+        $scope.save = function () {
+            if ($scope.checkpoint.is_new) {
+                Bus.broadcast("save_checkpoint", [$scope.checkpoint])
             }
-            $(".console_window").html("执行中请等待....")
-            $('#console').modal('show');
-            var param = $scope.detail.script
-            $http.post('/post/test/script', param).success(function (data) {
-                var content = "";
-                for (i in data) {
-                    content += data[i] + "<br/>"
+            $('#myModal').modal('hide')
+        }
+
+        var init_checkpoint = function (data) {
+            if (data != null) {
+                $scope.checkpoint = data;
+                $scope.checkpoint.is_new = false;
+            }
+            else {
+                $scope.checkpoint = {
+                    is_new: true,
+                    name: "检查点",
+                    check_target: {type: 'all', value: ''},
+                    check_content: {type: 'success', value: ''},
+                    execute: {type: 'continue', value: ''},
                 }
-                $(".console_window").html(content)
-            }).error(function () {
-                console.log("数据加载出错");
-            });
-        }
-
-        var init_resultCheck = function () {
-            $scope.check_option = {
-                keyword: "",
-                type: "success",
-                message: ""
             }
+            $('#myModal').modal('show')
         }
-
-        init_resultCheck();
-
-        $('#console').on('hidden.bs.modal', function (e) {
-            //alert(1)
-        })
+        Bus.regEvent("open_checkpoint_modal", init_checkpoint)
 
     });
 </script>

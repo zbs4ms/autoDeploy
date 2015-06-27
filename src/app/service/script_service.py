@@ -2,7 +2,7 @@ __author__ = 'wang'
 # -*- coding: utf-8 -*-
 from flask import request
 from app import app
-import json, db_service, tool
+import json, db_service, tool, re
 
 
 
@@ -21,7 +21,7 @@ def search_scripts():
 @app.route('/post/del_script', methods=['POST'])
 def del_script_by_id():
     try:
-        id=int(request.json.get('id'))
+        id = int(request.json.get('id'))
     except:
         return tool.commonError("id 错误")
     db = db_service.Scripts();
@@ -32,7 +32,7 @@ def del_script_by_id():
 @app.route('/get/script_detail/<script_id>')
 def get_script_by_id(script_id):
     try:
-        id=int(script_id)
+        id = int(script_id)
     except:
         return tool.commonError("id 错误")
     db = db_service.Scripts()
@@ -54,4 +54,16 @@ def save_script():
     data = request.json
     if (data.get('name').strip() == '' or data.get('version').strip() == ''):
         return tool.commonError();
+    params = analysis_param(data.get('script').get('bash_shell'));
+    if (params != None):
+        data['params'] = params
     return script.save_script(data)
+
+
+def analysis_param(src):
+    if (src == None):
+        return None
+    p = re.findall(r'\$(\w+)', src)
+    if p:
+        return p
+    return None
