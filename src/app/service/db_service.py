@@ -33,13 +33,16 @@ class Task(PyConnect):
 
     def get_task_by_id(self, task_id):
         response = self.find({'id': int(task_id)},
-                             {'_id': 0, 'id': 1, 'params': 1, 'subtask.ip': 1, 'subtask.params': 1,'subtask.status': 1})
+                             {'_id': 0, 'id': 1, 'process_id':1,'params': 1, 'subtask.ip': 1, 'subtask.params': 1,'subtask.status': 1})
         return response.toJson()
 
     def get_subtask_by_taskId(self, task_id):
         response = self.find({'id': int(task_id)}, {'_id': 0, 'subtask.ip': 1, 'subtask.status': 1})
         return response.toJson()
 
+    def update_task_by_taskId(self,task_id,data):
+        response = self.update({'id':int(task_id)},data)
+        return response.toJson();
 
 # 部署目录的class
 @singleton
@@ -63,7 +66,7 @@ class Process(PyConnect):
         return response.toJson()
 
     def save_process(self, data):
-        if (data['id'] != None):
+        if (data.has_key('id')):
             response = self.update({'id': int(data['id'])}, data)
         else:
             response = self.insert(data)
