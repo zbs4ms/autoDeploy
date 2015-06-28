@@ -25,24 +25,24 @@ class Task(PyConnect):
     # 取得正在运行中的任务列表
     def get_taskList(self):
         response = self.find({'status':0},{'_id': 0, 'id': 1, 'status': 1})
-        return response.toJson()
+        return response
 
     def create_task(self, data):
         response = self.insert(data)
-        return response.toJson()
+        return response
 
     def get_task_by_id(self, task_id):
         response = self.find({'id': int(task_id)},
                              {'_id': 0, 'id': 1, 'process_id':1,'params': 1, 'subtask.ip': 1, 'subtask.params': 1,'subtask.status': 1})
-        return response.toJson()
+        return response
 
     def get_subtask_by_taskId(self, task_id):
         response = self.find({'id': int(task_id)}, {'_id': 0, 'subtask.ip': 1, 'subtask.status': 1})
-        return response.toJson()
+        return response
 
     def update_task_by_taskId(self,task_id,data):
         response = self.update({'id':int(task_id)},data)
-        return response.toJson();
+        return response
 
 # 部署目录的class
 @singleton

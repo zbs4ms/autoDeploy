@@ -86,7 +86,7 @@
         }
 
         $scope.submit = function () {
-            $http.post('/post/update_task', $scope.task).success(function (data) {
+            $http.post('/post/execute_task', $scope.task).success(function (data) {
                 if (response_check(data)) {
                     location.href = "/task/execute/" + id;
                 }
