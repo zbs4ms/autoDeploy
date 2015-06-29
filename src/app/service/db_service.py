@@ -33,7 +33,11 @@ class Task(PyConnect):
 
     def get_task_by_id(self, task_id):
         response = self.find({'id': int(task_id)},
-                             {'_id': 0, 'id': 1, 'process_id':1,'params': 1, 'subtask.ip': 1, 'subtask.params': 1,'subtask.status': 1})
+                             {'_id': 0, 'id': 1, 'process_id':1,'params': 1,'subtask':1})
+        return response
+
+    def get_task_one_by_id(self, task_id):
+        response = self.find_one({'id': int(task_id)},{'_id': 0, 'id': 1, 'process_id':1,'params': 1,'subtask':1})
         return response
 
     def get_subtask_by_taskId(self, task_id):
@@ -58,7 +62,12 @@ class Process(PyConnect):
     # 根据id取得安装步骤列表
     def get_process_detail_by_id(self, id):
         response = self.find({'id': int(id)}, {'_id': 0, 'id': 1, 'name': 1, 'process': 1})
-        return response.toJson()
+        return response
+
+    # 根据id取得安装步骤列表，每次取得1个
+    def get_process_detail_one_by_id(self,id):
+        response = self.find_one({'id': int(id)}, {'_id': 0, 'id': 1, 'name': 1, 'process': 1})
+        return response
 
     # 删除部署流程,status=0 表示成功 -1表示失败
     def del_process_by_id(self, id):
@@ -66,8 +75,8 @@ class Process(PyConnect):
         return response.toJson()
 
     def save_process(self, data):
-        if (data.has_key('id')):
-            response = self.update({'id': int(data['id'])}, data)
+        if data.get('id'):
+            response = self.update({'id': int(data.get('id'))}, data)
         else:
             response = self.insert(data)
         return response.toJson()
@@ -86,10 +95,10 @@ class Scripts(PyConnect):
 
     # 获取一个安装脚本信息
     def get_script_by_id(self, id):
-        response = self.find(query={'id': id},
+        response = self.find_one(query={'id': id},
                              field={'_id': 0, 'id': 1, 'name': 1, 'version': 1, 'description': 1, 'script': 1,
                                     'checkList': 1})
-        return response.toJson()
+        return response
 
     # 根据脚本名字取得所有安装脚本,如果查询字为空,则返回所有
     def search_scripts_by_name(self, name=None):

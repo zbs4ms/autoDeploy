@@ -67,10 +67,11 @@ class response:
 
 
 class HttpClientByPost(object):
-    def __init__(self,ip,path,data):
+    def __init__(self,ip,host,path,data):
         self.data = data
         self.ip = ip
         self.path = path
+        self.host = host
 
     def connect(self):
         try:

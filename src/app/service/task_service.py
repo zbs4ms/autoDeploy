@@ -70,10 +70,12 @@ def get_target_list(task_id):
 
 
 # 目标机回调接口
-@app.route('/sub_task/call_back', methods=['POST'])
+@app.route('/sub_task/call_back',methods=['POST'])
 def target_call_back():
     #保存本次的执行结果到数据库
-    print(request.json.get('data'))
+    data = json.loads(request.data)
+    #保存本次的执行结果
+
     #查询下一步需要执行的
 
 # 发送到目标机执行

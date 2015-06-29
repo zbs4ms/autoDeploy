@@ -36,7 +36,7 @@ def get_script_by_id(script_id):
     except:
         return tool.commonError("id 错误")
     db = db_service.Scripts()
-    return db.get_script_by_id(id)
+    return db.get_script_by_id(id).toJson()
 
 
 # 取得测试环境的执行结果

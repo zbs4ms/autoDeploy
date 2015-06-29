@@ -1,37 +1,53 @@
 #!/usr/bin/expect -f
 
-set cip=[lindex $argv 0]
-set cuser=[lindex $argv 1]
-set cpasswd=[lindex $argv 2]
-set pwd=[lindex $argv 3]
-set clinetPwd=[lindex $argv 4]
+set cip [lindex $argv 0]
+set cuser [lindex $argv 1]
+set cpasswd [lindex $argv 2]
+set pwd [lindex $argv 3]
+set clinetPwd [lindex $argv 4]
 
-#拷贝clinet文件到目标机
-spawn scp $pwd/clinet $cuser@$cip:$clinetPwd
 
 #--添加ssh信任
-spawn scp ~/.ssh/id_rsa.pub $cuser@$cip:.ssh/id_service.pub
-expect {
-  "yes/no" { send "yes\r"; exp_continue}
-  "password:" { send "$cpasswd\r" }
-}
-expect "]#"
-spawn ssh $cuser@$cip
-expect {
-  "yes/no" { send "yes\r"; exp_continue}
-  "password:" { send "$cpasswd\r" }
-}
-expect "]#"
-send touch ~/.ssh/authorized_keys
-expect "]#"
-send cat ~/.ssh/id_service.pub >> ~/.ssh/authorized_keys
-expect "]#"
-send pip install flask
-expect "]#"
-#启动服务
-expect "]#"
-send python $clinetPwd/clinet/start.py
+#spawn scp ~/.ssh/id_rsa.pub $cuser@$cip:.ssh/id_service.pub
+#expect {
+#  "yes/no" { send "yes\r"; exp_continue}
+#  "password:" { send "$cpasswd\r" }
+#}
+#expect "]#"
+#spawn ssh $cuser@$cip
+#expect {
+#  "yes/no" { send "yes\r"; exp_continue}
+#  "password:" { send "$cpasswd\r" }
+#}
+#expect "]#"
+#send touch ~/.ssh/authorized_keys
+#expect "]#"
+#send cat ~/.ssh/id_service.pub >> ~/.ssh/authorized_keys
+#expect "]#"
 
-interact
+#拷贝clinet文件到目标机
+#spawn  scp -r $pwd $cuser@$cip:$clinetPwd
+#expect {
+#  "yes/no" { send "yes\r"; exp_continue}
+#  "password:" { send "$cpasswd\r" }
+#}
+#expect "]#"
+
+#登陆clinet
+#spawn ssh $cuser@$cip
+#expect {
+#  "yes/no" { send "yes\r"; exp_continue}
+#  "password:" { send "$cpasswd\r" }
+#}
+#expect "]#"
+#send "easy_install flask\r"
+#expect "]#"
+#send "easy_install supervisor\r"
+
+#启动服务
+#expect "]#"
+send "python $clinetPwd/clinet/start.py > run.log &\r"
+set timeout 1
+#interact
 
 

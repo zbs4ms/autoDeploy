@@ -20,7 +20,7 @@ def get_process_detail(id=None):
     except:
         return tool.commonError("id错误")
     db = db_service.Process()
-    return db.get_process_detail_by_id(id)
+    return db.get_process_detail_by_id(id).toJson()
 
 
 # 删除部署流程,status=0 表示成功 -1表示失败

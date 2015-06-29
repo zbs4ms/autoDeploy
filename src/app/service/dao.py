@@ -31,6 +31,17 @@ class PyConnect(object):
             print e
             return response().error("查找出现异常")
 
+    def find_one(self, query={}, field=None):
+        try:
+            if not field:
+                result = self.coll.find_one(query)
+            else:
+                result = self.coll.find_one(query, field)
+            return response().success(result)
+        except Exception as e:
+            print e
+            return response().error("查找出现异常")
+
     def insert(self, data):
         try:
             id = createId()
