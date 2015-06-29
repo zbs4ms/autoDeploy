@@ -4,27 +4,30 @@
 
     <div class="row">
         <div class="col-md-5">
-            <h4>目标机</h4>
-            <div class="list-group" style="height: 450px;overflow-y: auto">
-                <a href="#" class="list-group-item"
-                   ng-repeat="st in subtask"
-                   ng-click="target_click( ((st.ip)) )"
-                   ng-class="{'selected_target':selected==st.ip,'list-group-item-success':t.status==100,
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">目标机</h3>
+                </div>
+                <table class="table">
+                    <tbody>
+                    <tr ng-repeat="st in subtask" style="cursor:pointer" ng-click="target_click( ((st.ip)) )"
+                        ng-class="{'selected_target':selected==st.ip,'list-group-item-success':t.status==100,
                    'list-group-item-warning':t.status==0, 'list-group-item-info':t.status==1, 'list-group-item-danger':t.status==-1}">
-                    <div class="col-md-4"><p class="list-group-item-text">((st.ip))</p></div>
-                    <div class="col-md-8"><p class="list-group-item-text">((st.status))</p></div>
-                    <br/>
-                </a>
+                        <td>((st.ip))</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="col-md-7">
-            <h4>控制台日志</h4>
             <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">控制台日志</h3>
+                </div>
                 <div class="panel-body console_window">
                     <div style="height: 450px;overflow-y: auto">
                         ((target_log))
                     </div>
-                    <br/>
                 </div>
             </div>
         </div>
@@ -39,38 +42,38 @@
 {% block script %}
 <script>
 
-    var id='{{task_id}}';
-    var isDone=false
+    var id = '{{task_id}}';
+    var isDone = false
     App.controller("executeCtrl", function ($scope, $http) {
-        $scope.subtask=[];
-        $scope.target_log="";
-        $scope.selected="";
+        $scope.subtask = [];
+        $scope.target_log = "";
+        $scope.selected = "";
 
-        $scope.target_click=function(id){
-            $scope.selected=id;
+        $scope.target_click = function (id) {
+            $scope.selected = id;
             get_target_log();
             console.log(id)
         }
 
-        var get_target_list=function(){
-            if(id!=null&&id!=""){
-                $http.get('/get/task_list/detail/'+id).success(function(data){
-                    if(response_check(data)){
-                        $scope.subtask=data.result.subtask;
+        var get_target_list = function () {
+            if (id != null && id != "") {
+                $http.get('/get/task_list/detail/' + id).success(function (data) {
+                    if (response_check(data)) {
+                        $scope.subtask = data.result.subtask;
                         console.log($scope.subtask)
                     }
-                }).error(function(){
+                }).error(function () {
                     console.log("数据加载出错");
                 });
             }
         }
 
-        var get_target_log=function(){
+        var get_target_log = function () {
             if ($scope.selected != null && $scope.selected != "") {
-                var param={task_id:id,ip:$scope.selected}
-                $http.get('/post/task/log',param).success(function (data) {
-                    if(response_check(data)){
-                        $scope.target_log =data.result;
+                var param = {task_id: id, ip: $scope.selected}
+                $http.get('/post/task/log', param).success(function (data) {
+                    if (response_check(data)) {
+                        $scope.target_log = data.result;
                     }
                 }).error(function () {
                     console.log("数据加载出错");
