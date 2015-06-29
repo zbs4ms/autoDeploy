@@ -2,7 +2,6 @@
 {% block content %}
 <div class="container-fluid" ng-controller="scriptCtrl">
 
-
     {% include "include/script_info.html"%}
     {% include "include/script_detail.html"%}
 
@@ -87,7 +86,7 @@
             if(id!=''){
                 $http.get('/get/script_detail/'+id).success(function (data) {
                     if(response_check(data)){
-                        $scope.detail = data.result[0];
+                        $scope.detail = data.result;
                     }
                 }).error(function () {
                     console.log("数据加载出错");

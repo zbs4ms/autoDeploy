@@ -13,7 +13,7 @@ def search_scripts():
     keyword = request.json.get('keyword')
     if (keyword != None and keyword.strip() == ''):
         keyword = None
-    return db.search_scripts_by_name(keyword)
+    return db.search_scripts_by_name(keyword).toJson()
     # return json.dumps([{"id":"123","name":"JDK","ver":"1.7"},{"id":"223","name":"JDK","ver":"1.5"}]);
 
 
@@ -25,7 +25,7 @@ def del_script_by_id():
     except:
         return tool.commonError("id 错误")
     db = db_service.Scripts();
-    return db.del_script_by_id(id)
+    return db.del_script_by_id(id).toJson()
 
 
 # 通过Id取得安装脚本的信息
@@ -53,11 +53,11 @@ def save_script():
     script = db_service.Scripts()
     data = request.json
     if (data.get('name').strip() == '' or data.get('version').strip() == ''):
-        return tool.commonError();
+        return tool.commonError()
     params = analysis_param(data.get('script').get('bash_shell'));
     if (params != None):
         data['params'] = params
-    return script.save_script(data)
+    return script.save_script(data).toJson()
 
 
 def analysis_param(src):

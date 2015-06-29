@@ -46,7 +46,7 @@
             }
         };
         var get_taskList=function(){
-            $http.get('/get/taskList').success(function(data){
+            $http.get('/get/running/task').success(function(data){
                 if(response_check(data)){
                     $scope.taskList = data.result;
                 }

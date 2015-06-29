@@ -52,9 +52,9 @@ class PyConnect(object):
             print e
             return response().error("插入出现异常")
 
-    def update(self, data, setdata):
+    def update_set(self, data, setdata):
         try:
-            self.coll.update(data, {'$set': setdata})
+            self.coll.update(data, {'$set': setdata},False,True)
             return response().success()
         except Exception as e:
             print e

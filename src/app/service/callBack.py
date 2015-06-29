@@ -31,8 +31,6 @@ class callBack(object):
             sub = subtask[order]
             task.update({"id":self.taskId,"subtask.ip":self.ip},"$inc")
 
-
-
     #判断是否成功
     def isSucced(self):
         log = self.data.get("logstr")

@@ -39,14 +39,14 @@
                         <thead>
                         <tr>
                             <th width="20%">变量名</th>
-                            <th width="50%">描述</th>
+                            <th width="50%">所属脚本</th>
                             <th width="30%">值</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr ng-repeat="param in param_list">
                             <td>((param.name))</td>
-                            <td>((param.description))</td>
+                            <td>((param.desc))</td>
                             <td><input ng-model="param.value" class="form-control"></td>
                         </tr>
 
@@ -96,7 +96,7 @@
         }
 
         var get_params = function () {
-            $http.get('/get/process/params/' + id).success(function (data) {
+            $http.get('/get/process/params/' + $scope.task.process_id).success(function (data) {
                 if (response_check(data)) {
                     if(data.length==0){
                         location.href = "/task/execute/" + id;
@@ -116,14 +116,15 @@
         var get_task = function () {
             $http.get('/get/task/' + id).success(function (data) {
                 if (response_check(data)) {
-                    $scope.task = data.result[0]
+                    $scope.task = data.result
+                    get_params();
                 }
             }).error(function () {
                 console.log("数据加载出错");
             });
         }
         get_task();
-        get_params();
+
 
 
     });

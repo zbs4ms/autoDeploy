@@ -40,7 +40,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <button class="btn btn-large btn-block btn-primary"  ng-click="execute()" type="button">执行安装</button>
+            <button class="btn btn-large btn-block btn-primary"  ng-if="isCanExecute" ng-click="execute()" type="button">执行安装</button>
         </div>
     </div><br/>
     <div class="row">
@@ -60,6 +60,7 @@
 <script>
     var id="{{process_id}}";
     App.controller("processDetailCtrl", function($scope,$http) {
+        $scope.isCanExecute=true;
         $scope.remove=function(){
             if(window.confirm("确定删除？")){
                 var data={"id":id};
@@ -86,10 +87,10 @@
 
         var get_details=function(){
             $http.get('/get/processDetail/'+id).success(function(data){
-                if(response_check(data)){
-                    $scope.details = data.result[0];
-                    console.log($scope.details)
+                if(!response_check(data)){
+                    $scope.isCanExecute=false;
                 }
+                $scope.details = data.result[0];
             }).error(function(){
                 console.log("数据加载出错");
             });

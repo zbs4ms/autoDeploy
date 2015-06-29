@@ -2,11 +2,14 @@
 from flask import render_template
 from app import app
 
-
 @app.route('/')
 @app.route('/home')
 def home():
     return render_template('homePage.html',title='home')
+
+@app.route('/admin')
+def admin():
+    return render_template('admin/admin_manage.html',title='admin')
 
 @app.route('/process/detail/<id>')
 def processDetail(id):
