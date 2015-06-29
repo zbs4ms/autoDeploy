@@ -40,11 +40,11 @@ class InitClinet(threading.Thread):
         clinetPwd = "/Users/zbs/code/autoDeploy/src/app/service"
         command = commands.getstatusoutput(pwdPath+"/app/service/addSSH.exp "+self.clinetIp+" "+user+" "+passwd+" "+filePwd+" "+clinetPwd)
         if command and command[1] :
-            self.task.update({"id":task_id},{"inifLog":command,"message":"初始化成功"})
+            self.task.update_set({"id":task_id},{"inifLog":command,"message":"初始化成功"})
             self.firstScript(taskData,subtask);
             self.send()
         else:
-            self.task.update(task_id,{"inifLog":command,"status":"-1","message":"初始化失败"})
+            self.task.update_set(task_id,{"inifLog":command,"status":"-1","message":"初始化失败"})
 
     def firstScript(self,data,sub):
         self.processId=data.get("process_id")

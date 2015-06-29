@@ -9,7 +9,7 @@ import json, db_service, tool
 @app.route('/get/processList')
 def get_processList():
     db = db_service.Process()
-    return db.get_processList()
+    return db.get_processList().toJson()
 
 
 # 取得指定流程的安装步骤列表
@@ -31,7 +31,7 @@ def del_process():
     except:
         return tool.commonError("id错误")
     db = db_service.Process()
-    return db.del_process_by_id(id)
+    return db.del_process_by_id(id).toJson()
 
 
 # 保存安装流程
@@ -42,7 +42,7 @@ def save_process():
     if (data.get('name').strip() == ''):
         return tool.commonError();
     print(data)
-    return db.save_process(data)
+    return db.save_process(data).toJson()
 
 
 # 取得安装流程所需的变量列表

@@ -8,6 +8,10 @@ from app import app
 def home():
     return render_template('homePage.html',title='home')
 
+@app.route('/admin')
+def admin():
+    return render_template('admin/admin_manage.html',title='admin')
+
 @app.route('/process/detail/<id>')
 def processDetail(id):
     return render_template('processDetail.html',process_id=id)

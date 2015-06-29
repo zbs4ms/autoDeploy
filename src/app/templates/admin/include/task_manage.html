@@ -1,0 +1,45 @@
+<div class="row" ng-controller="taskController">
+    <div class="col-md-12" style="height: 400px;overflow-y: auto">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">删除任务</h3>
+            </div>
+            <table class="table">
+                <tbody>
+                <tr ng-repeat="tr in taskList">
+                    <td width="90%">((tr.id))</td>
+                    <td><a href="javascript:void(0)" ng-click="remove( (($index)) )">删除</a></td>
+                </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    App.controller("taskController", function($scope,$http) {
+        $scope.taskList=[];
+
+        $scope.remove=function(index){
+            var id= $scope.taskList[index].id
+            $http.post('/post/remove_task',{id:id}).success(function(data){
+                if(response_check(data)){
+                    $scope.taskList.pop(index);
+                }
+            }).error(function(){
+                console.log("数据加载出错");
+            });
+        }
+
+        var get_taskList=function(){
+            $http.get('/get/taskList').success(function(data){
+                if(response_check(data)){
+                    $scope.taskList = data.result;
+                }
+            }).error(function(){
+                console.log("数据加载出错");
+            });
+        }
+        get_taskList();
+    });
+</script>
