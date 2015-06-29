@@ -9,7 +9,7 @@ import json, db_service, tool
 @app.route('/get/processList')
 def get_processList():
     db = db_service.Process()
-    return db.get_processList().toJson()
+    return db.get_process_list().toJson()
 
 
 # 取得指定流程的安装步骤列表
@@ -20,7 +20,21 @@ def get_process_detail(id=None):
     except:
         return tool.commonError("id错误")
     db = db_service.Process()
-    return db.get_process_detail_by_id(id).toJson()
+    res = db.get_process_detail_by_id(id);
+    process_checke(res)
+    return res.toJson()
+
+
+def process_checke(res):
+    if res.status != -1:
+        for script in res.result.distinct('process'):
+            db = db_service.Scripts()
+            list = []
+            if db.get_script_by_id(script['id']).result is None:
+                res.status = -1
+                list.append(script['name'])
+            if len(list) > 0:
+                res.message = "脚本" + json.dumps(list) + "已经删除,当前流程不可用。"
 
 
 # 删除部署流程,status=0 表示成功 -1表示失败
@@ -39,9 +53,8 @@ def del_process():
 def save_process():
     db = db_service.Process()
     data = request.json
-    if (data.get('name').strip() == ''):
+    if data.get('name').strip() == '':
         return tool.commonError();
-    print(data)
     return db.save_process(data).toJson()
 
 
@@ -53,6 +66,17 @@ def get_process_params(process_id):
     except:
         return tool.commonError("id错误")
     db = db_service.Process()
-    #return db.get_process_params(id)
-    return json.dumps([{"name": "user", "value": "", "description": "用户名称"}, {"name": "HOST", "value": ""}])
+    res = db.get_process_detail_by_id(id)
+    if res.result is None:
+        return tool.commonError("未查找到对应的安装流程信息")
+    for script in res.result['process']:
+        db = db_service.Scripts()
+        list = []
+        script = db.get_script_by_id(script['id']).result
+        if res is not None:
+            for p in script['params']:
+                list.append({'desc': str(script['name'])+" "+str(script['version']), 'name': p})
+        else:
+            return tool.commonError("安装脚本数据异常")
 
+    return json.dumps(list)

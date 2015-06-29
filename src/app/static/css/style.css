@@ -30,6 +30,8 @@
 }
 .selected_target{
     font-size: 24px;
+    font-weight:bold;
+    color:brown;
 }
 .console_window{
     background-color:#0F0F10;

@@ -31,7 +31,8 @@ function IpCheck(ip) {
 
 function response_check(data){
     if (data.status == -1) {
-        alert(data.message);
+        $("#errorMessage p").html(data.message)
+        $("#errorMessage").show()
         return false
     }
     return true

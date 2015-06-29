@@ -22,11 +22,6 @@ class Task(PyConnect):
     def __init__(self):
         PyConnect.__init__(self, 'task')
 
-    # 取得正在运行中的任务列表
-    def get_taskList(self):
-        response = self.find({'status': 0}, {'_id': 0, 'id': 1, 'status': 1})
-        return response
-
     def create_task(self, data):
         response = self.insert(data)
         return response
@@ -36,7 +31,7 @@ class Task(PyConnect):
                              {'_id': 0, 'id': 1, 'process_id': 1, 'params': 1, 'subtask': 1})
         return response
 
-    def get_task_one_by_id(self, task_id):
+    def get_task_by_id(self, task_id):
         response = self.find_one({'id': int(task_id)}, {'_id': 0, 'id': 1, 'process_id': 1, 'params': 1, 'subtask': 1})
         return response
 
@@ -45,7 +40,7 @@ class Task(PyConnect):
         return response
 
     def update_task_by_taskId(self, task_id, data):
-        response = self.update_pushAll({'id': int(task_id)}, data)
+        response = self.update_set({'id': int(task_id)}, data)
         return response
 
 
@@ -56,17 +51,12 @@ class Process(PyConnect):
         PyConnect.__init__(self, 'process')
 
     # 取得部署流程列表
-    def get_processList(self):
+    def get_process_list(self):
         response = self.find(field={'_id': 0, 'id': 1, 'name': 1})
         return response
 
-    # 根据id取得安装步骤列表
-    def get_process_detail_by_id(self, id):
-        response = self.find({'id': int(id)}, {'_id': 0, 'id': 1, 'name': 1, 'process': 1})
-        return response
-
     # 根据id取得安装步骤列表，每次取得1个
-    def get_process_detail_one_by_id(self, id):
+    def get_process_detail_by_id(self, id):
         response = self.find_one({'id': int(id)}, {'_id': 0, 'id': 1, 'name': 1, 'process': 1})
         return response
 

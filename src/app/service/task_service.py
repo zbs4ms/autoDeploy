@@ -7,16 +7,24 @@ from execute import InitClinet
 
 # 取得正在运行中的任务列表
 @app.route('/get/taskList')
-def get_taskList():
+def get_task_all():
     db = db_service.Task()
-    return db.get_taskList().toJson()
+    response = db.find(field={'_id': 0, 'id': 1, 'status': 1})
+    return response.toJson()
 
+
+# 取得正在运行中的任务列表
+@app.route('/get/running/task')
+def get_running_task():
+    db = db_service.Task()
+    response = db.find({'status': {"$gt": -1}}, {'_id': 0, 'id': 1, 'status': 1})
+    return response.toJson()
 
 # 创建任务
 @app.route('/post/create_task', methods=['POST'])
 def create_task():
     data = request.json
-    if (data.get('process_id') == None):
+    if data.get('process_id') is None:
         tool.commonError("id 为空")
     db = db_service.Task()
     return db.create_task(data).toJson()
@@ -24,11 +32,12 @@ def create_task():
 
 # 更新任务信息
 @app.route('/post/execute_task', methods=['POST'])
-def update_task():
+def save_params_and_execute_task():
     data = request.json
     db = db_service.Task()
-    res = db.update_pushAll({'id': data.get('id')}, data)
-    if (res.status != -1):
+    data['status'] = 1
+    res = db.update_set({'id': data.get('id')}, data)
+    if res.status != -1:
         init = InitClinet(data.get('id'))
         init.start()
     return res.toJson()
@@ -90,8 +99,8 @@ def execute():
 @app.route('/post/remove_task', methods=['POST'])
 def remove_task_by_id():
     try:
-        id=int(request.json.get('id'))
+        id = int(request.json.get('id'))
     except:
         return tool.commonError("id 为空")
     db = db_service.Task()
-    return db.remove({'id':id}).toJson()
+    return db.remove({'id': id}).toJson()

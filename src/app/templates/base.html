@@ -1,38 +1,47 @@
 <html>
-  <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
-  <link href="{{url_for('static', filename='css/style.css')}}" rel="stylesheet">
-  <script src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
-  <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
-  <script src="{{url_for('static', filename='js/angular.min.js')}}"></script>
-  <script src="{{url_for('static', filename='js/common.js')}}"></script>
-  <head>
+<link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
+<link href="{{url_for('static', filename='css/style.css')}}" rel="stylesheet">
+<script src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
+<script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+<script src="{{url_for('static', filename='js/angular.min.js')}}"></script>
+<script src="{{url_for('static', filename='js/common.js')}}"></script>
+<head>
     {% if title %}
     <title>{{title}} - microblog</title>
     {% else %}
     <title>microblog</title>
     {% endif %}
-  </head>
-  <body style="background-color: #f8f8f8" ng-app="App">
+</head>
+<body style="background-color: #f8f8f8" ng-app="App">
 
 
-    {% if messages %}
-    <ul>
+{% if messages %}
+<ul>
     {% for message in messages %}
-        <li>{{ message }} </li>
+    <li>{{ message }}</li>
     {% endfor %}
-    </ul>
-    {% endif %}
-    <!-- header -->
-    {% block header %}
-      {% include "header.html"%}
-    {% endblock %}
+</ul>
+{% endif %}
 
-    <!-- header -->
-    <div style="margin-bottom: 80px"></div>
-    <div style="width: 80%;min-height:600px;margin: 0 auto;">
-    {% block content %}{% endblock %}
+<!-- header -->
+{% block header %}
+{% include "header.html"%}
+{% endblock %}
+<!-- header -->
+
+<div class="row" style="margin-bottom: 80px"></div>
+<div style="width: 80%;min-height:600px;margin: 0 auto;">
+    <div class="row" id="errorMessage" style="display: none">
+        <div role="alert" class="alert alert-danger alert-dismissible fade in">
+            <button aria-label="Close" data-dismiss="alert" class="close" type="button"><span
+                    aria-hidden="true">×</span>
+            </button>
+            <p></p>
+        </div>
     </div>
-    <br/><br/>
-    {% block script %}{% endblock %}
-  </body>
+    {% block content %}{% endblock %}
+</div>
+<br/><br/>
+{% block script %}{% endblock %}
+</body>
 </html>

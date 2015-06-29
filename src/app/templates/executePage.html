@@ -56,7 +56,7 @@
             if(id!=null&&id!=""){
                 $http.get('/get/task_list/detail/'+id).success(function(data){
                     if(response_check(data)){
-                        $scope.subtask=data.result[0].subtask;
+                        $scope.subtask=data.result.subtask;
                         console.log($scope.subtask)
                     }
                 }).error(function(){
@@ -70,7 +70,7 @@
                 var param={task_id:id,ip:$scope.selected}
                 $http.get('/post/task/log',param).success(function (data) {
                     if(response_check(data)){
-                        $scope.target_log =data.result[0];
+                        $scope.target_log =data.result;
                     }
                 }).error(function () {
                     console.log("数据加载出错");

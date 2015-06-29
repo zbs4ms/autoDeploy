@@ -19,7 +19,7 @@ class InitClinet(threading.Thread):
         self.script = db_service.Scripts()
 
     def run(self):
-        taskData= self.task.get_task_by_id(self.task_id).result[0]
+        taskData= self.task.get_task_by_id(self.task_id).result
         if taskData.has_key('subtask'):
             subtask=taskData['subtask']
         else:
@@ -32,10 +32,8 @@ class InitClinet(threading.Thread):
     def init(self,taskData,subtask):
         pwdPath = os.getcwd()
         task_id = taskData.get('id')
-        #user = subtask('user')
-        #passwd = subtask('password')
-        user = "root"
-        passwd = "123456"
+        user = subtask('user')
+        passwd = subtask('password')
         filePwd = pwdPath+"/app/service/clinet"
         clinetPwd = "/Users/zbs/code/autoDeploy/src/app/service"
         command = commands.getstatusoutput(pwdPath+"/app/service/addSSH.exp "+self.clinetIp+" "+user+" "+passwd+" "+filePwd+" "+clinetPwd)
@@ -48,7 +46,7 @@ class InitClinet(threading.Thread):
 
     def firstScript(self,data,sub):
         self.processId=data.get("process_id")
-        process = self.process.get_process_detail_one_by_id(self.processId).result
+        process = self.process.get_process_detail_by_id(self.processId).result
         if process.has_key('process') and process.get('process')[0]:
             self.scriptId=process.get('process')[0].get('id')
             scriptDetail = self.script.get_script_by_id(self.scriptId).result
