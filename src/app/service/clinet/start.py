@@ -27,7 +27,7 @@ def runScript():
         shellName= str(checkKey(req,'scriptId'))
         processId = checkKey(req,'processId')
         scriptType = checkKey(req,'type')
-        order = checkKey(req,'order')
+        order = req.get('order')
         taskId = checkKey(req,'taskId')
 
         #------初始化路径
