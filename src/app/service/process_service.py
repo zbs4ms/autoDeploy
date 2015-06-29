@@ -27,7 +27,7 @@ def get_process_detail(id=None):
 
 def process_checke(res):
     if res.status != -1:
-        for script in res.result.distinct('process'):
+        for script in res.result['process']:
             db = db_service.Scripts()
             list = []
             if db.get_script_by_id(script['id']).result is None:

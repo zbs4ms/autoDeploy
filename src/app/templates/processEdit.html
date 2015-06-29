@@ -181,7 +181,7 @@
             if(id==null||id=='')return;
             $http.get('/get/processDetail/'+id).success(function(data){
                 if(response_check(data)){
-                    $scope.details = data.result[0];
+                    $scope.details = data.result;
                 }
             }).error(function(){
                 console.log("数据加载出错");
