@@ -85,7 +85,7 @@
                 console.log("数据加载出错");
             });
         }
-
+        var ip_set=new Array();
         var valueCheck = function () {
             var status = true;
             if ($scope.target.ip == "") {
@@ -95,16 +95,18 @@
             else if (!IpCheck($scope.target.ip)) {
                 status = false;
                 alert("IP不合法");
+            }else if (typeof(ip_set[$scope.target.ip]) != "undefined"){
+                status = false;
+                alert("IP重复");
+            }else{
+                ip_set[$scope.target.ip]=$scope.target.ip
             }
-
+            console.log(typeof(ipset[$scope.target.ip]))
             if ($scope.target.user == "") {
                 alert("请填入登录用户");
                 status = false
             }
-            if ($scope.target.password == "") {
-                alert("请填入登录密码");
-                status = false
-            }
+
             return status
         }
 

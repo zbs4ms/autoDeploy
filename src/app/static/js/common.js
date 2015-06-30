@@ -31,11 +31,15 @@ function IpCheck(ip) {
 
 function response_check(data){
     if (data.status == -1) {
-        $("#errorMessage p").html(data.message)
-        $("#errorMessage").show()
+        showError(data.message)
         return false
     }
     return true
+}
+
+function showError(message){
+    $("#errorMessage p").html(message)
+    $("#errorMessage").show()
 }
 
 var  Bus=new EventDispatcher();//消息总线
