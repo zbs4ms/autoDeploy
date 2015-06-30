@@ -56,7 +56,7 @@
 
         $scope.edit_script=function(){
             if($scope.detail.name=='' || $scope.detail.version==''){
-                alert("请填入 “模块名称” 和 “版本号”")
+                error.show("请填入 “模块名称” 和 “版本号”")
                 return;
             }
             $("#base_info").slideToggle(400,function(){
@@ -72,11 +72,11 @@
         }
         $scope.valueCheck=function(){
             if($scope.detail.script.type=='expect'){
-                alert("暂时不能使用Expect脚本")
+                error.show("暂时不能使用Expect脚本")
                 return false;
             }
             if($scope.detail.script.bash_shell==''){
-                alert("请输入脚本内容")
+                error.show("请输入脚本内容")
                 return false;
             }
             return true;

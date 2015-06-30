@@ -70,13 +70,13 @@
 
         $scope.create_task = function () {
             if ($scope.task.subtask.length == 0) {
-                alert("请填入目标机信息")
+                error.show("请填入目标机信息")
                 return false;
             }
             $http.post('/post/create_task', $scope.task).success(function (data) {
                 if (response_check(data)) {
                     if (data.result.id == null) {
-                        alert("保存出错")
+                        error.show("保存出错")
                         return;
                     }
                     location.href = "/task/config/" + data.result.id
@@ -89,22 +89,22 @@
         var valueCheck = function () {
             var status = true;
             if ($scope.target.ip == "") {
-                alert("请填入IP");
-                status = false
+                error.show("请填入IP");
+                return false
             }
             else if (!IpCheck($scope.target.ip)) {
-                status = false;
-                alert("IP不合法");
+                error.show("IP不合法");
+                return false
             }else if (typeof(ip_set[$scope.target.ip]) != "undefined"){
-                status = false;
-                alert("IP重复");
+                error.show("IP重复");
+                return false
             }else{
                 ip_set[$scope.target.ip]=$scope.target.ip
             }
-            console.log(typeof(ipset[$scope.target.ip]))
+
             if ($scope.target.user == "") {
-                alert("请填入登录用户");
-                status = false
+                error.show("请填入登录用户");
+                return false
             }
 
             return status

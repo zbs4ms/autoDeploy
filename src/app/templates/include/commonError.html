@@ -1,0 +1,29 @@
+<div class="row-fluid" id="errorMessage"
+     style="display: none ;left: 0;position: fixed;right: 0;z-index: 1030;top:40%">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 alert alert-danger alert-dismissible fade in text-center">
+        <button aria-label="Close" class="close" type="button" onclick="error.hide(200)"><span
+                aria-hidden="true">×</span>
+        </button>
+        <p></p>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+<script>
+    var error = {
+        show: function (message, timeout) {
+            $("#errorMessage p").html(message)
+            $("#errorMessage").fadeIn()
+            if (timeout ==null){
+                setTimeout(function(){error.hide(200)}, 4000)
+            }else if (timeout ==0){
+
+            }else{
+                setTimeout(function(){error.hide(200)}, timeout)
+            }
+        },
+        hide: function (time) {
+            $("#errorMessage").fadeOut(time)
+        },
+    }
+</script>
