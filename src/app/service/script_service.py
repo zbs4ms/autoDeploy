@@ -43,7 +43,7 @@ def get_script_by_id(script_id):
 @app.route('/post/test/script', methods=['POST'])
 def test_script():
     print(request.json.get('params'))
-    return json.dumps(["install", "安装成功"])
+    return json.dumps(["无法提供测试环境", "请确保脚本能正常运行"])
 
 
 # 保存脚本
