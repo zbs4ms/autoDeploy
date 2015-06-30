@@ -18,7 +18,15 @@ class callBack(object):
 
     #流程执行
     def execute(self):
-
+        self.save()
+        (isSucced,check)=self.isSucced()
+        if isSucced:
+            next = self.next()
+            if next:
+                self.send(next);
+            else:
+                return None
+        else:
 
     #保存返回信息入库
     def save(self):
@@ -29,7 +37,9 @@ class callBack(object):
         if task and task.get('subtask'):
             subtask = task.get('subtask')
             sub = subtask[order]
-            task.update({"id":self.taskId,"subtask.ip":self.ip},"$inc")
+            if sub.get("log"):
+                log = sub.get("log") + "\n" + log
+            task.update({"id":self.taskId,"subtask.ip":self.ip},{"log":log})
 
     #判断是否成功
     def isSucced(self):
@@ -57,4 +67,4 @@ class callBack(object):
                 return subtask[nextOrder]
 
     #执行脚本
-    def send(self):
+    def send(self,data):
