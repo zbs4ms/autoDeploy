@@ -92,7 +92,9 @@ def target_call_back():
 # 发送到目标机执行
 @app.route('/post/execute', methods=['POST'])
 def execute():
-    execute.run(request.json.get('task_id'))
+    taskId = request.json.get('task_id')
+    init = InitClinet(taskId,0)
+    init.execute();
 
 
 # 删除task

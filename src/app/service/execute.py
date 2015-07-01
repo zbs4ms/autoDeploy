@@ -7,71 +7,62 @@ import os
 import commands
 import socket
 import json
-
-host = 5000
+from clinet import Clinet
 
 class InitClinet(threading.Thread):
-    def __init__(self,task_id):
+    def __init__(self,task_id,order):
         super(InitClinet, self).__init__()
+        if not task_id:
+            raise  "无效的参数传递"
         self.task_id = task_id
+        myname = socket.getfqdn(socket.gethostname())
+        self.serviceIp = socket.gethostbyname(myname);
+        self.serviceHost = 5000
+        self.serviceRoute = "/sub_task/call_back"
+        self.order=order
+        #初始化些数据库
         self.task = db_service.Task()
         self.process = db_service.Process()
         self.script = db_service.Scripts()
 
-    def run(self):
-        taskData= self.task.get_task_by_id(self.task_id).result
-        if taskData.has_key('subtask'):
-            subtask=taskData['subtask']
-        else:
-            return None
-        for sub in subtask:
-            self.clinetIp = sub.get('ip')
-            self.parameter = sub.get('params')
-            self.init(taskData,sub)
-
-    def init(self,taskData,subtask):
-        pwdPath = os.getcwd()
-        task_id = taskData.get('id')
-        user = subtask('user')
-        passwd = subtask('password')
-        filePwd = pwdPath+"/app/service/clinet"
-        clinetPwd = "/Users/zbs/code/autoDeploy/src/app/service"
-        command = commands.getstatusoutput(pwdPath+"/app/service/addSSH.exp "+self.clinetIp+" "+user+" "+passwd+" "+filePwd+" "+clinetPwd)
-        if command and command[1] :
-            self.task.update_set({"id":task_id},{"inifLog":command,"message":"初始化成功"})
-            self.firstScript(taskData,subtask);
-            self.send()
-        else:
-            self.task.update_set(task_id,{"inifLog":command,"status":"-1","message":"初始化失败"})
-
-    def firstScript(self,data,sub):
-        self.processId=data.get("process_id")
-        process = self.process.get_process_detail_by_id(self.processId).result
-        if process.has_key('process') and process.get('process')[0]:
-            self.scriptId=process.get('process')[0].get('id')
-            scriptDetail = self.script.get_script_by_id(self.scriptId).result
-            if scriptDetail and scriptDetail.has_key('script'):
-                script = scriptDetail.get('script')
-                self.content = script.get('bash_shell')
-                self.type = script.get('type')
-                self.order = 0
-    #构造发送消息
-    def send(self):
-        myname = socket.getfqdn(socket.gethostname())
+    def execute(self):
+        (taskData,process,script) = self.findDataByDatabase(self.order)
         data={}
-        data["clinetIp"] =str(self.clinetIp)   #ok
-        #data["serviceIp"] = socket.gethostbyname(myname) #ok
-        data["serviceIp"] = '127.0.0.1'
-        data["serviceHost"] = host  #ok
-        data["serviceRoute"] = "/sub_task/call_back" #ok
-        data["parameter"] = self.parameter
-        data["content"] = self.content   #ok
-        data["scriptId"] = self.scriptId  #ok
-        data["processId"] = self.processId #ok
-        data["type"] = self.type #ok
-        data["order"] = self.order
-        data["taskId"] = self.task_id
-        http = tool.HttpClientByPost(self.clinetIp,9090,"/get/runScript", json.dumps(data))
-        http.connect();
+        data["serviceIp"]=self.serviceIp
+        data["serviceHost"]=self.serviceHost
+        data["serviceRoute"]=self.serviceRoute
+        data["order"]=self.order
+        data["taskId"]=self.task_id
+        data["content"]=script.get("bash_shell")
+        data["scriptId"]=script.get("id")
+        data["processId"]=taskData.get("process_id")
+        data["type"]=script.get("type")
+        for sub in taskData.get('subtask'):
+            data["clinetIp"]=sub.get('ip')
+            data["parameter"]=sub.get('params')
+            data["user"]=sub.get("user")
+            data["passwd"]=sub.get("password")
+            data["clinetPath"]="/usr/local"
+            data["servicePath"]=os.getcwd()+"/clinet"
+            clinet = Clinet(data)
+            log = clinet.execute(copyFile=True,runClinet=True,send=True)
+            for l in log:
+                print l
+
+    def findDataByDatabase(self,order):
+        taskData = self.task.get_task_by_id(self.task_id).result
+        if taskData.get("process_id") and taskData.get("subtask"):
+            process = self.process.get_process_detail_by_id(taskData.get("process_id")).result
+            if process.get('process') and process.get('process')[order]:
+                scriptId=process.get('process')[order].get('id')
+                script = self.script.get_script_by_id(scriptId).result
+                return taskData,process,script
+            else:
+                raise ValueError("process 数据库数据不完整")
+        else:
+            raise ValueError("task 数据库数据不完整")
 
 
+if __name__ == '__main__':
+    aa = InitClinet('1435514343626092',0)
+    aa.execute();

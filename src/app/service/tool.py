@@ -44,7 +44,6 @@ def commonError(message=None):
         return json.dumps({"status": -1, "message": message})
     return json.dumps({"status": -1, "message": "关键信息缺失"})
 
-
 class response:
     def __init__(self):
         self.status = 0
