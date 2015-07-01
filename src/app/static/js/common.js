@@ -6,15 +6,15 @@
  */
 
 //params 必须是一个数组
-function EventDispatcher (){
-    this._eventMap={};//结构{'eventName':[fn1,fn2]}
-    this.regEvent=function(name,fn){
-        this._eventMap[name]!=null?this._eventMap[name].push(fn):this._eventMap[name]=[fn];
+function EventDispatcher() {
+    this._eventMap = {};//结构{'eventName':[fn1,fn2]}
+    this.regEvent = function (name, fn) {
+        this._eventMap[name] != null ? this._eventMap[name].push(fn) : this._eventMap[name] = [fn];
     };
     //params 必须是一个数组
-    this.broadcast=function(eventName,params){
-        var fun=this._eventMap[eventName];
-        for(var i=0;i<fun.length;i++){
+    this.broadcast = function (eventName, params) {
+        var fun = this._eventMap[eventName];
+        for (var i = 0; i < fun.length; i++) {
             fun[i].apply(this, params);
         }
     };
@@ -29,7 +29,7 @@ function IpCheck(ip) {
     return true;
 }
 
-function response_check(data){
+function response_check(data) {
     if (data.status == -1) {
         showError(data.message)
         return false
@@ -37,14 +37,10 @@ function response_check(data){
     return true
 }
 
-function showError(message){
-    $("#errorMessage p").html(message)
-    $("#errorMessage").show()
-}
 
-var  Bus=new EventDispatcher();//消息总线
-var  App = angular.module("App", []);
-App.config(function($interpolateProvider) {
+var Bus = new EventDispatcher();//消息总线
+var App = angular.module("App", []);
+App.config(function ($interpolateProvider) {
     $interpolateProvider.startSymbol('((');
     $interpolateProvider.endSymbol('))');
 });

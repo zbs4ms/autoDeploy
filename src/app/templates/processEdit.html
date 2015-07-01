@@ -166,11 +166,11 @@
         var value_check = function () {
             var status = true;
             if ( $scope.details.name.trim() == "") {
-                alert("请填写名字")
+                error.show("请填写名字")
                 status = false;
             }
             if ( $scope.details.process == null ||  $scope.details.process.length == 0) {
-                alert("请选择安装流程")
+                error.show("请选择安装流程")
                 status = false;
             }
             return status;
