@@ -14,10 +14,10 @@
                     <table class="table  text-center">
                         <thead>
                         <tr >
-                            <td >
+                            <td style="font-size: 18px">
                                 <b>安装顺序</b>
                             </td>
-                            <td >
+                            <td style="font-size: 18px">
                                 <b>模块名称</b>
                             </td>
                         </tr>
@@ -90,7 +90,7 @@
                 if(!response_check(data)){
                     $scope.isCanExecute=false;
                 }
-                $scope.details = data.result[0];
+                $scope.details = data.result;
             }).error(function(){
                 console.log("数据加载出错");
             });

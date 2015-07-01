@@ -21,10 +21,10 @@
         $scope.taskList=[];
 
         $scope.remove=function(index){
-            var id= $scope.taskList[index].id
+            var id=$scope.taskList[index].id
             $http.post('/post/remove_task',{id:id}).success(function(data){
                 if(response_check(data)){
-                    $scope.taskList.pop(index);
+                    $scope.taskList.splice(index,1)
                 }
             }).error(function(){
                 console.log("数据加载出错");

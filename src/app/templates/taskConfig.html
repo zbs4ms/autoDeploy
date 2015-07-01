@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container-fluid" ng-controller="taskCtrl">
     <div class="row-fluid title">
-        <h3 id="example-heading-new">任务配置</h3>
+        <h3 id="example-heading-new">任务号:{{task_id}}</h3>
     </div>
     <div class="row">
         <div class="col-md-12">
@@ -38,9 +38,9 @@
                     <table class="table">
                         <thead>
                         <tr>
-                            <th width="20%">变量名</th>
-                            <th width="50%">所属脚本</th>
-                            <th width="30%">值</th>
+                            <th width="30%">变量名</th>
+                            <th width="30%">所属脚本</th>
+                            <th width="40%">值</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -124,8 +124,6 @@
             });
         }
         get_task();
-
-
 
     });
 </script>
