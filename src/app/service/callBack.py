@@ -37,7 +37,12 @@ class CallBack(object):
         task=self.task.get_task_by_id(self.data.get("taskId")).result
         if task and task.get('subtask'):
            subTaskList = task.get("subtask")
-           subtask = subTaskList[self.data.get("order")]
+           for s in subTaskList:
+               if s.get("ip") in self.data.get("clinetIp"):
+                   subtask = s
+           if not subtask:
+               raise  ValueError("数据库task中的值有异常")
+           #subtask = subTaskList[self.data.get("order")]
            if not isinstance(subtask.get("log"), list):
                subtask["log"]=[]
            subtask["log"].append(self.data.get("logstr"))
@@ -117,7 +122,7 @@ class CallBack(object):
                     script = self.script.get_script_by_id(scriptId).result
                     return taskData,processDetail,script
                 else:
-                    return None
+                    return None,None,None
             else:
                 raise ValueError("process 数据库数据不完整")
         else:

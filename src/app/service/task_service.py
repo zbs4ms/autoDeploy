@@ -5,6 +5,7 @@ from app import app
 import json, db_service, tool
 from sendData import InitClinet
 from callBack import CallBack
+from clinet import Clinet
 
 # 取得正在运行中的任务列表
 @app.route('/get/taskList')
@@ -68,7 +69,12 @@ def get_task_log(task_id):
 def test_connection():
     # TODO
     print(request.json.get('target'))
-    return json.dumps({"status": 0, "message": ""})
+    data = {"clinetIp":request.json.get("ip")}
+    clinet = Clinet(data)
+    if clinet.isConnect():
+        return json.dumps({"status": 0, "message": ""})
+    else:
+        return tool.commonError("目标机无法连接")
 
 
 # 取得任务信息
@@ -86,11 +92,7 @@ def target_call_back():
     # 保存本次的执行结果到数据库
     data = json.loads(request.data)
     callBack = CallBack(data)
-    callBack.execute();
-    # 保存本次的执行结果
-
-    # 查询下一步需要执行的
-
+    callBack.execute()
 
 # 发送到目标机执行
 @app.route('/post/execute', methods=['POST'])
