@@ -31,7 +31,7 @@ function IpCheck(ip) {
 
 function response_check(data) {
     if (data.status == -1) {
-        showError(data.message)
+        error.show(data.message)
         return false
     }
     return true

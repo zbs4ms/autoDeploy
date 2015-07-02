@@ -68,7 +68,7 @@ def get_task_log(task_id):
 def test_connection():
     # TODO
     print(request.json.get('target'))
-    return json.dumps({"status": 0, "message": ""})
+    return json.dumps({"status": -1, "message": "连接失败"})
 
 
 # 取得任务信息
