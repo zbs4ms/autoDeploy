@@ -30,6 +30,8 @@ def process_checke(res):
         for script in res.result['process']:
             db = db_service.Scripts()
             list = []
+            if not script.get('id'):
+                continue
             if db.get_script_by_id(script['id']).result is None:
                 res.status = -1
                 list.append(script['name'])

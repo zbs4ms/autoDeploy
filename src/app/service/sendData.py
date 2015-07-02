@@ -48,9 +48,9 @@ class InitClinet(threading.Thread):
             data["clinetPath"]=os.getcwd()
             data["servicePath"]=os.getcwd()+"/clinet"
             clinet = Clinet(data)
-            log = clinet.execute(send=True)
-            for l in log:
-                print l
+            (mark,log) = clinet.execute(send=True)
+            if not mark:
+                print log
 
     def findDataByDatabase(self,order):
         taskData = self.task.get_task_by_id(self.task_id).result

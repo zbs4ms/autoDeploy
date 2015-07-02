@@ -19,7 +19,9 @@ class CallBack(object):
     #流程执行
     def execute(self):
         try:
+            print "保存返回的数据"
             self.saveLog()
+            print "判断是否能继续执行"
             (isSucced,check)=self.isSucced()
             if isSucced:
                 self.nextScript()
@@ -46,7 +48,6 @@ class CallBack(object):
            if not isinstance(subtask.get("log"), list):
                subtask["log"]=[]
            subtask["log"].append(self.data.get("logstr"))
-           #subTaskList[self.data.get("order")] = subtask
            self.task.update_set({"id":int(self.data.get("taskId"))},{"subtask":subTaskList})
         else:
             raise ValueError("task数据库中的值不完善")
@@ -108,9 +109,9 @@ class CallBack(object):
         data["clinetPath"]=os.getcwd()
         data["servicePath"]=os.getcwd()+"/clinet"
         clinet = Clinet(data)
-        log = clinet.execute(send=True)
-        for l in log:
-            print l
+        (mark,log) = clinet.execute(send=True)
+        if not mark:
+            print log
 
     def findDataByDatabase(self,task_id,order):
         taskData = self.task.get_task_by_id(task_id).result
@@ -127,6 +128,10 @@ class CallBack(object):
                 raise ValueError("process 数据库数据不完整")
         else:
             raise ValueError("task 数据库数据不完整")
+
+    #检查点的校验
+    def checkContent(self):
+        print ""
 
     #校验需要传递的参数
     def checkParameter(self,isNotEmptyKey):
