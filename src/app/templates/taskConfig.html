@@ -98,10 +98,6 @@
         var get_params = function () {
             $http.get('/get/process/params/' + $scope.task.process_id).success(function (data) {
                 if (response_check(data)) {
-                    if(data.length==0){
-                        location.href = "/task/execute/" + id;
-                        return
-                    }
                     if($scope.task['params'] ==null){
                         $scope.task['params'] = jQuery.extend(true,[], data);
                     }
