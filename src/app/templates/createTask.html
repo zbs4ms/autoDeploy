@@ -56,8 +56,10 @@
             var param = {target: $scope.target};
             $http.post('/post/test/connection', param).success(function (data) {
                 if (response_check(data)) {
+                    ip_set.push($scope.target.ip)
                     $scope.task.subtask.push($scope.target);
                     init();
+
                 }
             }).error(function () {
                 console.log("连接错误");
@@ -65,7 +67,8 @@
         }
 
         $scope.remove = function (index) {
-            delete $scope.task.subtask.pop(index);
+            ip_set.splice(index,1)
+            delete $scope.task.subtask.splice(index,1);
         }
 
         $scope.create_task = function () {
@@ -85,8 +88,9 @@
                 console.log("数据加载出错");
             });
         }
-        var ip_set=new Array();
+        var ip_set=[];
         var valueCheck = function () {
+            console.log(ip_set.indexOf($scope.target.ip))
             var status = true;
             if ($scope.target.ip == "") {
                 error.show("请填入IP");
@@ -95,11 +99,11 @@
             else if (!IpCheck($scope.target.ip)) {
                 error.show("IP不合法");
                 return false
-            }else if (typeof(ip_set[$scope.target.ip]) != "undefined"){
+            }else if (ip_set.indexOf($scope.target.ip)!=-1){
                 error.show("IP重复");
                 return false
             }else{
-                ip_set[$scope.target.ip]=$scope.target.ip
+
             }
 
             if ($scope.target.user == "") {

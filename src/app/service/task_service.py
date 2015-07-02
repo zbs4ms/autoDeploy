@@ -22,6 +22,7 @@ def get_running_task():
     response = db.find({'status': {"$gt": -1}}, {'_id': 0, 'id': 1, 'status': 1})
     return response.toJson()
 
+
 # 创建任务
 @app.route('/post/create_task', methods=['POST'])
 def create_task():
@@ -40,7 +41,7 @@ def save_params_and_execute_task():
     data['status'] = 1
     res = db.update_set({'id': data.get('id')}, data)
     if res.status != -1:
-        init = InitClinet(data.get('id'),0)
+        init = InitClinet(data.get('id'), 0)
         init.start()
     return res.toJson()
 
@@ -69,7 +70,7 @@ def get_task_log(task_id):
 def test_connection():
     # TODO
     print(request.json.get('target'))
-    return json.dumps({"status": 0, "message": ""})
+    return json.dumps({"status": 0, "message": "连接失败"})
 
 
 # 取得任务信息
@@ -89,11 +90,12 @@ def target_call_back():
     callBack = CallBack(data)
     callBack.execute()
 
+
 # 发送到目标机执行
 @app.route('/post/execute', methods=['POST'])
 def execute():
     taskId = request.json.get('task_id')
-    init = InitClinet(taskId,0)
+    init = InitClinet(taskId, 0)
     init.execute();
 
 
