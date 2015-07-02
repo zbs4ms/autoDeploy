@@ -53,14 +53,14 @@
             if (!valueCheck()) {
                 return false
             }
-            var param = {"target": $scope.target};
+            var param = {target: $scope.target};
             $http.post('/post/test/connection', param).success(function (data) {
                 if (response_check(data)) {
                     $scope.task.subtask.push($scope.target);
                     init();
                 }
             }).error(function () {
-                console.log("数据加载出错");
+                console.log("连接错误");
             });
         }
 
