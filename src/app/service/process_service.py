@@ -74,8 +74,9 @@ def get_process_params(process_id):
         list = []
         script = db.get_script_by_id(script['id']).result
         if res is not None:
-            for p in script['params']:
-                list.append({'desc': str(script['name'])+" "+str(script['version']), 'name': p})
+            if script.get('params'):
+                for p in script.get('params'):
+                    list.append({'desc': str(script['name'])+" "+str(script['version']), 'name': p})
         else:
             return tool.commonError("安装脚本数据异常")
 

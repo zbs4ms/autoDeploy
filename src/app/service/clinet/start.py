@@ -17,6 +17,7 @@ def test():
 @app.route('/get/runScript',methods=['POST'])
 def runScript():
     try:
+        print "开始执行clinet"
         req = json.loads(request.data)
         clinetIp = checkKey(req,'clinetIp')
         serviceIp = checkKey(req,'serviceIp')
@@ -80,4 +81,4 @@ def initFile(processId,shellName,scriptType):
     return shellPathName,logPathName
 
 if __name__ == '__main__':
-    app.run(port=9090)
+    app.run('0.0.0.0',port=9090)

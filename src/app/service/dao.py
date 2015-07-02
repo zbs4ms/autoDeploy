@@ -67,3 +67,33 @@ class PyConnect(object):
         except Exception as e:
             print e
             return response().error("删除出现异常")
+
+    def test(self,data,setdata):
+        self.coll.find_one_and_update(data,{'$push':setdata})
+
+
+if __name__ == "__main__":
+    task = PyConnect("task")
+    data={'id':143574146422672}
+    setdata={'subtask.log':"aaaa"}
+    #setdata={'status':"aaaa"}
+    #findData = {"subtask.ip":"192.168.0.236"}
+    #task.test(data,setdata)
+    # aa = task.find_one(findData)
+
+    #add ={'subtask':[{"ip":"1.1.1.1","log":["aa","bb","cc"],"name":"zzzbbbsss"},{'subtask':{"ip":"2.2.2.2","log":["aa","bb","cc"],"name":"zzzbbbsss"}}]}
+
+    #task.update_set(data,add)
+
+    #find = {"subtask":"1.1.1.1"}
+
+    find = task.find_one(data).result
+    sub = find.get("subtask")
+    print sub
+
+    updata={'subtask':sub}
+    bbb = task.update_set({'id':143574146422672},{"subtask":["nimabi"]})
+    #aa =task.find_one(find)
+   # print aa
+
+
