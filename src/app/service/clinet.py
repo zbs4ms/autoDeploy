@@ -2,6 +2,8 @@
 import httplib,json,tool,os,commands,socket,subprocess
 
 
+clinetHost= 9090
+
 class Clinet(object):
     def __init__(self,data):
         #传递过来的值
@@ -19,7 +21,7 @@ class Clinet(object):
             if runClinet:
                 log.append(self.runClinet())
             if send:
-                log.append(self.send())
+                self.send()
             return True,log
         except Exception,e:
             return False,tool.commonError(e.message)
@@ -28,14 +30,13 @@ class Clinet(object):
     def send(self):
         #-----1.对参数进行校验-----
         #  设置不能为空的值的key的名字
-        isNotEmptyKey=["clinetIp","serviceIp","serviceHost","serviceRoute","content","scriptId","processId","type","order","taskId"]
+        isNotEmptyKey=["clinetIp","serviceIp","serviceHost","serviceRoute","content","scriptId","processId","type","taskId"]
         #  设置可以为空的key的名字
-        isEmptyKey=["parameter"]
+        isEmptyKey=["parameter","order"]
         self.checkParameter(isNotEmptyKey)
         #-----2.发送http请求-----
-        clinetHost=9090
         clinetPath="/get/runScript"
-        http = HttpClientByPost(self.data.get("clinetIP"),clinetHost,clinetPath, json.dumps(self.data))
+        http = HttpClientByPost(self.data.get("clinetIp"),clinetHost,clinetPath, json.dumps(self.data))
         http.connect();
 
     #安装ssh信任

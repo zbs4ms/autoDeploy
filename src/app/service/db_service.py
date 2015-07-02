@@ -116,7 +116,9 @@ if __name__ == '__main__':
     # print db.get_taskList()
     # analysis_param("@QES @1233 &ANS =abcc &CHE =yyzz")
 
-    data = "jjk; $aaa jkjkj jjjk kjkjl $bbbbb jkjkl; ioqi3nnknjk;\njkklj\t\n  $aaaa"
-    matchObj = re.findall(r'\$(\w+)', data)
-    if matchObj:
-        print matchObj
+    #data = "jjk; $aaa jkjkj jjjk kjkjl $bbbbb jkjkl; ioqi3nnknjk;\njkklj\t\n  $aaaa"
+    #matchObj = re.findall(r'\$(\w+)', data)
+    #if matchObj:
+    #    print matchObj
+    data = Task()
+    data.update_set()("{'subtask.ip':'192.168.0.236'}","{'subtask.log':['aaa','bbb','ccc']}")

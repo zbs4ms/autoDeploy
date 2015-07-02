@@ -2,8 +2,9 @@ __author__ = 'wang'
 # -*- coding: utf-8 -*-
 from flask import request
 from app import app
-import json, db_service, tool, execute
-from execute import InitClinet
+import json, db_service, tool
+from sendData import InitClinet
+from callBack import CallBack
 
 # 取得正在运行中的任务列表
 @app.route('/get/taskList')
@@ -38,7 +39,7 @@ def save_params_and_execute_task():
     data['status'] = 1
     res = db.update_set({'id': data.get('id')}, data)
     if res.status != -1:
-        init = InitClinet(data.get('id'))
+        init = InitClinet(data.get('id'),0)
         init.start()
     return res.toJson()
 
@@ -84,6 +85,8 @@ def get_target_list(task_id):
 def target_call_back():
     # 保存本次的执行结果到数据库
     data = json.loads(request.data)
+    callBack = CallBack(data)
+    callBack.execute();
     # 保存本次的执行结果
 
     # 查询下一步需要执行的

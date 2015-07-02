@@ -25,27 +25,30 @@ class InitClinet(threading.Thread):
         self.process = db_service.Process()
         self.script = db_service.Scripts()
 
-    def execute(self):
+    def run(self):
+        print "开始执行service"
         (taskData,process,script) = self.findDataByDatabase(self.order)
+        scriptCommand = script.get("script")
         data={}
         data["serviceIp"]=self.serviceIp
         data["serviceHost"]=self.serviceHost
         data["serviceRoute"]=self.serviceRoute
         data["order"]=self.order
         data["taskId"]=self.task_id
-        data["content"]=script.get("bash_shell")
+        data["content"]=scriptCommand.get("bash_shell")
         data["scriptId"]=script.get("id")
         data["processId"]=taskData.get("process_id")
-        data["type"]=script.get("type")
+        data["type"]=scriptCommand.get("type")
         for sub in taskData.get('subtask'):
             data["clinetIp"]=sub.get('ip')
             data["parameter"]=sub.get('params')
             data["user"]=sub.get("user")
             data["passwd"]=sub.get("password")
-            data["clinetPath"]="/usr/local"
+            #data["clinetPath"]="/usr/local"
+            data["clinetPath"]=os.getcwd()
             data["servicePath"]=os.getcwd()+"/clinet"
             clinet = Clinet(data)
-            log = clinet.execute(copyFile=True,runClinet=True,send=True)
+            log = clinet.execute(send=True)
             for l in log:
                 print l
 
@@ -64,5 +67,5 @@ class InitClinet(threading.Thread):
 
 
 if __name__ == '__main__':
-    aa = InitClinet('1435514343626092',0)
-    aa.execute();
+    aa = InitClinet('1435846434658261',0)
+    aa.start();

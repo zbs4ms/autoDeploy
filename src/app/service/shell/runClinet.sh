@@ -16,7 +16,7 @@ expect {
 expect "*"
 send "cd $clinetPath/clinet\r"
 expect "*"
-send "nohup python start.py &\r"
+send "nohup python start.py >> start.log&\r"
 interact
 expect eof
 EOF
