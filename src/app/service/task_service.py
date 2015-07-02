@@ -22,7 +22,6 @@ def get_running_task():
     response = db.find({'status': {"$gt": -1}}, {'_id': 0, 'id': 1, 'status': 1})
     return response.toJson()
 
-
 # 创建任务
 @app.route('/post/create_task', methods=['POST'])
 def create_task():
@@ -69,8 +68,13 @@ def get_task_log(task_id):
 @app.route('/post/test/connection', methods=['POST'])
 def test_connection():
     # TODO
-    print(request.json.get('target'))
-    return json.dumps({"status": 0, "message": "连接失败"})
+    target = (request.json.get('target'))
+    data = {"clinetIp":target.get("ip")}
+    clinet = Clinet(data)
+    if clinet.isConnect():
+        return json.dumps({"status": 0, "message": ""})
+    else:
+        return tool.commonError("目标机无法连接")
 
 
 # 取得任务信息
@@ -89,7 +93,6 @@ def target_call_back():
     data = json.loads(request.data)
     callBack = CallBack(data)
     callBack.execute()
-
 
 # 发送到目标机执行
 @app.route('/post/execute', methods=['POST'])
