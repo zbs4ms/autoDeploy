@@ -9,9 +9,11 @@ class Clinet(object):
         #传递过来的值
         self.data = data
 
-    def execute(self,addSSH=False,init=False,copyFile=False,runClinet=False,send=False):
+    def execute(self,addSSH=False,init=False,copyFile=False,runClinet=False,send=False,isConnect=False):
         log=[]
         try:
+            if isConnect:
+                log.append(self.isConnect())
             if addSSH:
                 log.append(self.addSSH())
             if init:
