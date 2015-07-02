@@ -68,8 +68,8 @@ def get_task_log(task_id):
 @app.route('/post/test/connection', methods=['POST'])
 def test_connection():
     # TODO
-    print(request.json.get('target'))
-    data = {"clinetIp":request.json.get("ip")}
+    target = (request.json.get('target'))
+    data = {"clinetIp":target.get("ip")}
     clinet = Clinet(data)
     if clinet.isConnect():
         return json.dumps({"status": 0, "message": ""})
