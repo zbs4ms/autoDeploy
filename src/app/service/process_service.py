@@ -71,15 +71,16 @@ def get_process_params(process_id):
     res = db.get_process_detail_by_id(id)
     if res.result is None:
         return tool.commonError("未查找到对应的安装流程信息")
+    list = []
     for script in res.result['process']:
         db = db_service.Scripts()
-        list = []
-        script = db.get_script_by_id(script['id']).result
-        if res is not None:
-            if script.get('params'):
-                for p in script.get('params'):
-                    list.append({'desc': str(script['name'])+" "+str(script['version']), 'name': p})
-        else:
-            return tool.commonError("安装脚本数据异常")
+        if script.get('id'):
+            script = db.get_script_by_id(script.get('id')).result
+            if script is not None:
+                if script.get('params'):
+                    for p in script.get('params'):
+                        list.append({'desc': str(script['name'])+" "+str(script['version']), 'name': p})
+            else:
+                return tool.commonError("安装脚本数据异常")
 
     return json.dumps(list)
