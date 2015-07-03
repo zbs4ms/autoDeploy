@@ -31,6 +31,9 @@ class CallBack(object):
         except Exception, e:
             return tool.commonError(e.message)
 
+    def finished(self):
+        print ""
+
     # 保存返回信息入库
     def saveLog(self):
         # 1.检查参数
@@ -108,8 +111,8 @@ class CallBack(object):
         data["parameter"] = sub.get('params')
         data["user"] = sub.get("user")
         data["passwd"] = sub.get("password")
-        data["clinetPath"]="/usr/local"
-        #data["clinetPath"] = os.getcwd()
+        #data["clinetPath"]="/usr/local"
+        data["clinetPath"] = os.getcwd()
         data["servicePath"] = os.getcwd() + "/clinet"
         clinet = Clinet(data)
         (mark, log) = clinet.execute(send=True)

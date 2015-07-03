@@ -44,8 +44,8 @@ class InitClinet(threading.Thread):
             data["parameter"]=sub.get('params')
             data["user"]=sub.get("user")
             data["passwd"]=sub.get("password")
-            data["clinetPath"]="/usr/local"
-            #data["clinetPath"]=os.getcwd()
+            #data["clinetPath"]="/usr/local"
+            data["clinetPath"]=os.getcwd()
             data["servicePath"]=os.getcwd()+"/clinet"
             clinet = Clinet(data)
             (mark,log) = clinet.execute(init=True,copyFile=True,send=True)
