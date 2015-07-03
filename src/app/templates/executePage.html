@@ -14,7 +14,11 @@
                         ng-class="{'selected_target':selected==st.ip,'list-group-item-success':st.status==100,
                    'list-group-item-warning':st.status==0, 'list-group-item-info':st.status==1, 'list-group-item-danger':st.status==-1}">
                         <td>
-                            ((st.ip))
+                            ((st.ip)) &nbsp;&nbsp;
+                            <b ng-if="st.status==0">等待命令</b>
+                            <b ng-if="st.status==1">执行中...</b>
+                            <b ng-if="st.status==-1">执行失败</b>
+                            <b ng-if="st.status==100">完成</b>
                         </td>
                     </tr>
                     </tbody>
