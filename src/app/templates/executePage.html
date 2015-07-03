@@ -30,8 +30,11 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">控制台日志</h3>
                 </div>
-                <textarea ng-model="target_log" readonly="readonly" class="form-control console_window"
-                          style="background-color:#0F0F10;color: #dddddd;height: 70%"></textarea>
+                <div class="panel-body console_window">
+                    <div style="height: 450px;overflow-y: auto">
+                        <p ng-repeat="log in target_log">((log))</p>
+                    </div>
+                </div>
             </div>
         </div>
         <br/>
@@ -85,7 +88,7 @@
             }
         }
         get_target_list()
-        window.setInterval(get_target_list, 20000);
+        window.setInterval(get_target_list,20000);
         //window.setInterval(get_target_log,20000);
     });
 
