@@ -61,8 +61,8 @@
                     ip_set.push($scope.target.ip)
                     $scope.task.subtask.push($scope.target);
                     init();
-                    $scope.testing=false;
                 }
+                $scope.testing=false;
             }).error(function () {
                 console.log("连接错误");
                 $scope.testing=false;

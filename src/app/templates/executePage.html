@@ -10,10 +10,12 @@
                 </div>
                 <table class="table">
                     <tbody>
-                    <tr ng-repeat="st in subtask" style="cursor:pointer" ng-click="target_click( ((st.ip)) )"
-                        ng-class="{'selected_target':selected==st.ip,'list-group-item-success':t.status==100,
-                   'list-group-item-warning':t.status==0, 'list-group-item-info':t.status==1, 'list-group-item-danger':t.status==-1}">
-                        <td>((st.ip))</td>
+                    <tr ng-repeat="st in subtask" style="cursor:pointer" ng-click="target_click( (($index)) )"
+                        ng-class="{'selected_target':selected==st.ip,'list-group-item-success':st.status==100,
+                   'list-group-item-warning':st.status==0, 'list-group-item-info':st.status==1, 'list-group-item-danger':st.status==-1}">
+                        <td>
+                            ((st.ip))
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -49,15 +51,16 @@
         $scope.target_log = "";
         $scope.selected = "";
 
-        $scope.target_click = function (id) {
-            $scope.selected = id;
-            get_target_log();
-            console.log(id)
+        $scope.target_click = function (index) {
+            $scope.selected = $scope.subtask[index].ip;
+            //get_target_log();
+            $scope.target_log = $scope.subtask[index].log
+            console.log($scope.subtask)
         }
 
         var get_target_list = function () {
             if (id != null && id != "") {
-                $http.get('/get/task_list/detail/' + id).success(function (data) {
+                $http.get('/get/subtask/status/' + id).success(function (data) {
                     if (response_check(data)) {
                         $scope.subtask = data.result.subtask;
                         console.log($scope.subtask)
@@ -81,7 +84,7 @@
             }
         }
         get_target_list()
-        //window.setInterval(get_target_list,20000);
+        window.setInterval(get_target_list,20000);
         //window.setInterval(get_target_log,20000);
     });
 

@@ -36,7 +36,7 @@ class Task(PyConnect):
         return response
 
     def get_subtask_by_taskId(self, task_id):
-        response = self.find_one({'id': int(task_id)}, {'_id': 0, 'subtask.ip': 1, 'subtask.status': 1})
+        response = self.find_one({'id': int(task_id)}, {'_id': 0, 'subtask.ip': 1, 'subtask.status': 1,'log':1})
         return response
 
     def update_task_by_taskId(self, task_id, data):

@@ -22,6 +22,7 @@ def get_running_task():
     response = db.find({'status': {"$gt": -1}}, {'_id': 0, 'id': 1, 'status': 1})
     return response.toJson()
 
+
 # 创建任务
 @app.route('/post/create_task', methods=['POST'])
 def create_task():
@@ -45,8 +46,8 @@ def save_params_and_execute_task():
     return res.toJson()
 
 
-# 根据ID取得执行中的任务信息  status 0=连接成功  0=等待命令 1=命令执行中 100=全部完成 -1=执行失败
-@app.route('/get/task_list/detail/<task_id>')
+# 根据ID取得执行中的任务信息  status  0=等待命令 1=命令执行中 100=全部完成 -1=执行失败
+@app.route('/get/subtask/status/<task_id>')
 def get_taskList_info(task_id):
     db = db_service.Task()
     try:
@@ -56,10 +57,12 @@ def get_taskList_info(task_id):
     return db.get_subtask_by_taskId(id).toJson()
 
 
-# 根据ID取得执行中的任务信息  status 0=安装中  1=成功 -1=失败
-@app.route('/get/task/log/<task_id>')
-def get_task_log(task_id):
-    # TODO
+# 根据 taskId 和 subtask ip 取得对应的执行日志
+@app.route('/post/subtask/log')
+def get_task_log():
+    #TODO
+    task_id = int(request.json.get('task_id'))
+    subtask_ip = int(request.json.get('ip'))
     print(task_id)
     return "123123"
 
@@ -69,7 +72,7 @@ def get_task_log(task_id):
 def test_connection():
     # TODO
     target = (request.json.get('target'))
-    data = {"clinetIp":target.get("ip")}
+    data = {"clinetIp": target.get("ip")}
     clinet = Clinet(data)
     if clinet.isConnect():
         return json.dumps({"status": 0, "message": ""})
