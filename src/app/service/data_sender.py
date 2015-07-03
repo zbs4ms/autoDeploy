@@ -48,7 +48,7 @@ class InitClinet(threading.Thread):
             data["clinetPath"]=os.getcwd()
             data["servicePath"]=os.getcwd()+"/clinet"
             clinet = Clinet(data)
-            (mark,log) = clinet.execute(init=True,copyFile=True,send=True)
+            (mark,log) = clinet.execute(init=True,copyFile=True,runClinet=True,send=True)
             if not mark:
                 print log
 
