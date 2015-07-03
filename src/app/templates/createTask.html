@@ -25,7 +25,7 @@
                     <td><input type="text" placeholder="登录用户" class="form-control" ng-model="target.user"></td>
                     <td><input type="text" placeholder="登录密码" class="form-control" ng-model="target.password"></td>
                     <td>
-                        <button class="btn btn-default" ng-click="add_target()">添加</button>
+                        <button ng-if="!testing"  class="btn btn-default" ng-click="add_target()">添加</button>
                     </td>
                 </tr>
                 </tbody>
@@ -49,20 +49,23 @@
     App.controller("taskCtrl", function ($scope, $http) {
         $scope.task = {process_id: id, status:0, subtask: []};
         $scope.target;
+        $scope.testing=false;
         $scope.add_target = function () {
             if (!valueCheck()) {
                 return false
             }
+            $scope.testing=true;
             var param = {target: $scope.target};
             $http.post('/post/test/connection', param).success(function (data) {
                 if (response_check(data)) {
                     ip_set.push($scope.target.ip)
                     $scope.task.subtask.push($scope.target);
                     init();
-
+                    $scope.testing=false;
                 }
             }).error(function () {
                 console.log("连接错误");
+                $scope.testing=false;
             });
         }
 

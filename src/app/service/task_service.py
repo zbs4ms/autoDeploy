@@ -3,7 +3,7 @@ __author__ = 'wang'
 from flask import request
 from app import app
 import json, db_service, tool
-from sendData import InitClinet
+from data_sender import InitClinet
 from callBack import CallBack
 from clinet import Clinet
 
@@ -93,13 +93,6 @@ def target_call_back():
     data = json.loads(request.data)
     callBack = CallBack(data)
     callBack.execute()
-
-# 发送到目标机执行
-@app.route('/post/execute', methods=['POST'])
-def execute():
-    taskId = request.json.get('task_id')
-    init = InitClinet(taskId, 0)
-    init.execute();
 
 
 # 删除task
