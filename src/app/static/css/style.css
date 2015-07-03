@@ -36,6 +36,7 @@
 .console_window{
     background-color:#0F0F10;
     color: #dddddd;
+    resize: none;
 }
 .script_detail{
     display: none;
